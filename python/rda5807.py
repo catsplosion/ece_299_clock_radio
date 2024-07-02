@@ -105,7 +105,7 @@ class Radio:
         self.i2c = i2c
         self.mute_flag = False
         self.bass_boost_flag = True
-        self.mono = False
+        self.mono_flag = False
         self.rtc = RTC()
 
         #read chip ID and check
