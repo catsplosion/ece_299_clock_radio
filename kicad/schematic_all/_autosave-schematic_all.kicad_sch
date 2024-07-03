@@ -5880,7 +5880,7 @@
 				)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "220nF"
 			(at 228.6063 123.19 90)
 			(effects
 				(font
@@ -8089,7 +8089,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "220nF"
 			(at 233.68 140.9635 0)
 			(effects
 				(font
@@ -9671,7 +9671,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100pF"
+		(property "Value" "100nF"
 			(at 195.326 141.732 0)
 			(effects
 				(font
