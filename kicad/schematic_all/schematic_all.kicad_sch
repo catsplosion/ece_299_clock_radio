@@ -236,30 +236,30 @@
 				)
 			)
 		)
-		(symbol "Connector:Barrel_Jack_MountingPin"
-			(pin_names hide)
+		(symbol "Connector:Screw_Terminal_01x02"
+			(pin_names
+				(offset 1.016) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "J"
-				(at 0 5.334 0)
+				(at 0 2.54 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "Barrel_Jack_MountingPin"
-				(at 1.27 -6.35 0)
+			(property "Value" "Screw_Terminal_01x02"
+				(at 0 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
 			(property "Footprint" ""
-				(at 1.27 -1.016 0)
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -268,15 +268,6 @@
 				)
 			)
 			(property "Datasheet" "~"
-				(at 1.27 -1.016 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "DC Barrel Jack with a mounting pin"
 				(at 0 0 0)
 				(effects
 					(font
@@ -285,7 +276,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "DC power barrel jack connector"
+			(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -294,7 +285,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "BarrelJack*"
+			(property "ki_keywords" "screw terminal"
 				(at 0 0 0)
 				(effects
 					(font
@@ -303,10 +294,19 @@
 					(hide yes)
 				)
 			)
-			(symbol "Barrel_Jack_MountingPin_0_1"
+			(property "ki_fp_filters" "TerminalBlock*:*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_01x02_1_1"
 				(rectangle
-					(start -5.08 3.81)
-					(end 5.08 -3.81)
+					(start -1.27 1.27)
+					(end 1.27 -3.81)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -315,36 +315,11 @@
 						(type background)
 					)
 				)
-				(arc
-					(start -3.302 3.175)
-					(mid -3.9343 2.54)
-					(end -3.302 1.905)
+				(circle
+					(center 0 -2.54)
+					(radius 0.635)
 					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start -3.302 3.175)
-					(mid -3.9343 2.54)
-					(end -3.302 1.905)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 3.81 2.54)
-					)
-					(stroke
-						(width 0.254)
+						(width 0.1524)
 						(type default)
 					)
 					(fill
@@ -353,32 +328,7 @@
 				)
 				(polyline
 					(pts
-						(xy -3.81 -2.54) (xy -2.54 -2.54) (xy -1.27 -1.27) (xy 0 -2.54) (xy 2.54 -2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 3.683 3.175)
-					(end -3.302 1.905)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-			)
-			(symbol "Barrel_Jack_MountingPin_1_1"
-				(polyline
-					(pts
-						(xy -1.016 -4.572) (xy 1.016 -4.572)
+						(xy -0.5334 -2.2098) (xy 0.3302 -3.048)
 					)
 					(stroke
 						(width 0.1524)
@@ -388,18 +338,57 @@
 						(type none)
 					)
 				)
-				(text "Mounting"
-					(at 0 -4.191 0)
-					(effects
-						(font
-							(size 0.381 0.381)
-						)
+				(polyline
+					(pts
+						(xy -0.5334 0.3302) (xy 0.3302 -0.508)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.3556 -2.032) (xy 0.508 -2.8702)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.3556 0.508) (xy 0.508 -0.3302)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
 					)
 				)
 				(pin passive line
-					(at 7.62 2.54 180)
-					(length 2.54)
-					(name "~"
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -415,9 +404,9 @@
 					)
 				)
 				(pin passive line
-					(at 7.62 -2.54 180)
-					(length 2.54)
-					(name "~"
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -425,24 +414,6 @@
 						)
 					)
 					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -7.62 90)
-					(length 3.048)
-					(name "MountPin"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "MP"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4123,12 +4094,6 @@
 		(uuid "ec50771a-0807-4fdc-96d8-d17e6576e1e6")
 	)
 	(junction
-		(at 27.94 38.1)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f0d66eba-6f68-40be-9511-d6bbd4774c61")
-	)
-	(junction
 		(at 238.76 107.95)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4422,16 +4387,6 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 36.83) (xy 27.94 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "333c8fec-9ad5-48e1-a71c-0e3062953721")
-	)
-	(wire
-		(pts
 			(xy 95.25 111.76) (xy 95.25 113.03)
 		)
 		(stroke
@@ -4479,16 +4434,6 @@
 			(type default)
 		)
 		(uuid "400e9779-27d0-43ec-ae85-9a0bd1d2929f")
-	)
-	(wire
-		(pts
-			(xy 43.18 24.13) (xy 43.18 26.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "420fc3d5-23de-44bf-97ae-0b2d5f552882")
 	)
 	(wire
 		(pts
@@ -4599,16 +4544,6 @@
 			(type default)
 		)
 		(uuid "5358aa10-1831-4c1c-bff2-d61e782a687e")
-	)
-	(wire
-		(pts
-			(xy 44.45 31.75) (xy 44.45 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "547e31bf-c6c2-447d-b19a-caad060030c0")
 	)
 	(wire
 		(pts
@@ -4762,6 +4697,26 @@
 	)
 	(wire
 		(pts
+			(xy 21.59 31.75) (xy 21.59 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d623142-36e5-486a-9b0e-5dcb4994c505")
+	)
+	(wire
+		(pts
+			(xy 21.59 25.4) (xy 26.67 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d6ce905-8d73-48ce-897b-959a5211b456")
+	)
+	(wire
+		(pts
 			(xy 77.47 63.5) (xy 64.77 63.5)
 		)
 		(stroke
@@ -4889,16 +4844,6 @@
 			(type default)
 		)
 		(uuid "855fd2ab-fa42-4b0e-beed-76bb44733447")
-	)
-	(wire
-		(pts
-			(xy 44.45 38.1) (xy 27.94 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "856bb623-0a65-4013-af8b-e8c67320ff4b")
 	)
 	(wire
 		(pts
@@ -5182,16 +5127,6 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 26.67) (xy 35.56 26.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c1f3ae47-e335-4554-9b72-b08f9f1c3758")
-	)
-	(wire
-		(pts
 			(xy 86.36 121.92) (xy 86.36 111.76)
 		)
 		(stroke
@@ -5279,16 +5214,6 @@
 			(type default)
 		)
 		(uuid "d879f62e-9afb-4ed1-a1a7-5db34c8a053f")
-	)
-	(wire
-		(pts
-			(xy 27.94 38.1) (xy 27.94 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d8fda5b9-ed98-462d-b637-0917b5936d37")
 	)
 	(wire
 		(pts
@@ -5382,16 +5307,6 @@
 	)
 	(wire
 		(pts
-			(xy 35.56 31.75) (xy 44.45 31.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e7355756-c83b-4d54-a4d2-db0c48896224")
-	)
-	(wire
-		(pts
 			(xy 257.81 67.31) (xy 257.81 69.85)
 		)
 		(stroke
@@ -5469,6 +5384,16 @@
 			(type default)
 		)
 		(uuid "f1283ce9-0f65-4a33-894e-107e707a0ac3")
+	)
+	(wire
+		(pts
+			(xy 29.21 22.86) (xy 29.21 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f214996b-33da-45ea-9360-69df6dc02386")
 	)
 	(wire
 		(pts
@@ -6732,6 +6657,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Screw_Terminal_01x02")
+		(at 29.21 30.48 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "23b87c8a-ccf9-4379-aba0-9fe76bbf2574")
+		(property "Reference" "J1"
+			(at 31.75 29.2099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Screw_Terminal_01x02"
+			(at 31.75 31.7499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 29.21 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 29.21 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 29.21 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "75be30c0-ba50-449d-8737-871672284c21")
+		)
+		(pin "2"
+			(uuid "35ba2f79-a16b-40b5-9f19-d4492d5a2415")
+		)
+		(instances
+			(project ""
+				(path "/017a32bd-a431-4565-87b4-2161296abf15"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 58.42 179.07 0)
 		(unit 1)
@@ -7075,7 +7070,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 27.94 39.37 0)
+		(at 21.59 31.75 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -7084,7 +7079,7 @@
 		(fields_autoplaced yes)
 		(uuid "31d59380-9ed6-4a94-8c61-af662e17bcbe")
 		(property "Reference" "#PWR01"
-			(at 27.94 45.72 0)
+			(at 21.59 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7093,16 +7088,15 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 30.48 40.6399 0)
+			(at 21.59 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 27.94 39.37 0)
+			(at 21.59 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7111,7 +7105,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 27.94 39.37 0)
+			(at 21.59 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7120,7 +7114,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 27.94 39.37 0)
+			(at 21.59 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7142,7 +7136,7 @@
 	)
 	(symbol
 		(lib_id "power:+12V")
-		(at 43.18 24.13 0)
+		(at 29.21 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -7151,7 +7145,7 @@
 		(fields_autoplaced yes)
 		(uuid "3c73c36e-903a-4d07-8b7c-f2262c6cdb3c")
 		(property "Reference" "#PWR03"
-			(at 43.18 27.94 0)
+			(at 29.21 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7160,7 +7154,7 @@
 			)
 		)
 		(property "Value" "+12V"
-			(at 43.18 19.05 0)
+			(at 29.21 17.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7168,7 +7162,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 43.18 24.13 0)
+			(at 29.21 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7177,7 +7171,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 24.13 0)
+			(at 29.21 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7186,7 +7180,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+12V\""
-			(at 43.18 24.13 0)
+			(at 29.21 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7693,7 +7687,7 @@
 				)
 			)
 		)
-		(property "Value" "10uF"
+		(property "Value" "680uF"
 			(at 245.364 104.14 90)
 			(effects
 				(font
@@ -7701,7 +7695,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
 			(at 245.11 107.95 0)
 			(effects
 				(font
@@ -8112,77 +8106,6 @@
 			(project ""
 				(path "/017a32bd-a431-4565-87b4-2161296abf15"
 					(reference "SW2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Barrel_Jack_MountingPin")
-		(at 27.94 29.21 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7ba4d6e6-cc4d-4587-8143-7ad5ccd087ba")
-		(property "Reference" "J1"
-			(at 27.94 20.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Barrel_Jack_MountingPin"
-			(at 27.94 22.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_BarrelJack:BarrelJack_Horizontal"
-			(at 29.21 30.226 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 29.21 30.226 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "DC Barrel Jack with a mounting pin"
-			(at 27.94 29.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "da49d4f3-9ae5-425e-b2af-58ea97c762e9")
-		)
-		(pin "2"
-			(uuid "56ecb066-70a0-4f7b-8acd-079967288ddd")
-		)
-		(pin "MP"
-			(uuid "7a68db3c-e789-44a2-b9d2-6a1eca4ea225")
-		)
-		(instances
-			(project ""
-				(path "/017a32bd-a431-4565-87b4-2161296abf15"
-					(reference "J1")
 					(unit 1)
 				)
 			)
@@ -9282,7 +9205,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
 			(at 257.81 129.54 0)
 			(effects
 				(font
