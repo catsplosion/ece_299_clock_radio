@@ -1,4 +1,4 @@
-23701355510498028
+23662177160010548
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -48488,258 +48488,6 @@ conn samtec discrete wire terminal
 0
 22
 21
-Connector_Samtec_MicroPower
-Samtec_UMPS-02-XX.X-X-V-S-W_1x02-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-10
-3
-Connector_Samtec_MicroPower
-Samtec_UMPS-02-XX.X-X-V-S_1x02_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-2
-2
-Connector_Samtec_MicroPower
-Samtec_UMPS-03-XX.X-X-V-S-W_1x03-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-11
-4
-Connector_Samtec_MicroPower
-Samtec_UMPS-03-XX.X-X-V-S_1x03_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-3
-3
-Connector_Samtec_MicroPower
-Samtec_UMPS-04-XX.X-X-V-S-W_1x04-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-12
-5
-Connector_Samtec_MicroPower
-Samtec_UMPS-04-XX.X-X-V-S_1x04_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-4
-4
-Connector_Samtec_MicroPower
-Samtec_UMPS-05-XX.X-X-V-S-W_1x05-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-13
-6
-Connector_Samtec_MicroPower
-Samtec_UMPS-05-XX.X-X-V-S_1x05_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-5
-5
-Connector_Samtec_MicroPower
-Samtec_UMPS-06-XX.X-X-V-S-W_1x06-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-14
-7
-Connector_Samtec_MicroPower
-Samtec_UMPS-06-XX.X-X-V-S_1x06_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-6
-6
-Connector_Samtec_MicroPower
-Samtec_UMPS-07-XX.X-X-V-S-W_1x07-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-15
-8
-Connector_Samtec_MicroPower
-Samtec_UMPS-07-XX.X-X-V-S_1x07_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-7
-7
-Connector_Samtec_MicroPower
-Samtec_UMPS-08-XX.X-X-V-S-W_1x08-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-16
-9
-Connector_Samtec_MicroPower
-Samtec_UMPS-08-XX.X-X-V-S_1x08_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-8
-8
-Connector_Samtec_MicroPower
-Samtec_UMPS-09-XX.X-X-V-S-W_1x09-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-17
-10
-Connector_Samtec_MicroPower
-Samtec_UMPS-09-XX.X-X-V-S_1x09_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-9
-9
-Connector_Samtec_MicroPower
-Samtec_UMPS-10-XX.X-X-V-S-W_1x10-1MP_P2.0mm_Socket_WeldTab
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-18
-11
-Connector_Samtec_MicroPower
-Samtec_UMPS-10-XX.X-X-V-S_1x10_P2.0mm_Socket
-2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power socket
-0
-10
-10
-Connector_Samtec_MicroPower
-Samtec_UMPT-02-XX.X-X-V-S-W_1x02-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-10
-3
-Connector_Samtec_MicroPower
-Samtec_UMPT-02-XX.X-X-V-S_1x02_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-2
-2
-Connector_Samtec_MicroPower
-Samtec_UMPT-03-XX.X-X-V-S-W_1x03-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-11
-4
-Connector_Samtec_MicroPower
-Samtec_UMPT-03-XX.X-X-V-S_1x03_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-3
-3
-Connector_Samtec_MicroPower
-Samtec_UMPT-04-XX.X-X-V-S-W_1x04-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-12
-5
-Connector_Samtec_MicroPower
-Samtec_UMPT-04-XX.X-X-V-S_1x04_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-4
-4
-Connector_Samtec_MicroPower
-Samtec_UMPT-05-XX.X-X-V-S-W_1x05-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-13
-6
-Connector_Samtec_MicroPower
-Samtec_UMPT-05-XX.X-X-V-S_1x05_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-5
-5
-Connector_Samtec_MicroPower
-Samtec_UMPT-06-XX.X-X-V-S-W_1x06-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-14
-7
-Connector_Samtec_MicroPower
-Samtec_UMPT-06-XX.X-X-V-S_1x06_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-6
-6
-Connector_Samtec_MicroPower
-Samtec_UMPT-07-XX.X-X-V-S-W_1x07-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-15
-8
-Connector_Samtec_MicroPower
-Samtec_UMPT-07-XX.X-X-V-S_1x07_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-7
-7
-Connector_Samtec_MicroPower
-Samtec_UMPT-08-XX.X-X-V-S-W_1x08-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-16
-9
-Connector_Samtec_MicroPower
-Samtec_UMPT-08-XX.X-X-V-S_1x08_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-8
-8
-Connector_Samtec_MicroPower
-Samtec_UMPT-09-XX.X-X-V-S-W_1x09-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-17
-10
-Connector_Samtec_MicroPower
-Samtec_UMPT-09-XX.X-X-V-S_1x09_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-9
-9
-Connector_Samtec_MicroPower
-Samtec_UMPT-10-XX.X-X-V-S-W_1x10-1MP_P2.0mm_Terminal_WeldTab
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-18
-11
-Connector_Samtec_MicroPower
-Samtec_UMPT-10-XX.X-X-V-S_1x10_P2.0mm_Terminal
-2.00 mm mPOWER Ultra Micro Power Terminal, Vertical (source: https://suddendocs.samtec.com/prints/umpt-xx-xx.x-xx-v-x-x-x-x-xr-footprint.pdf)
-conn samtec ultra-mirco-power terminal
-0
-10
-10
 Connector_Stocko
 Stocko_MKS_1651-6-0-202_1x2_P2.50mm_Vertical
 Stocko MKS 16xx series connector, (https://www.stocko-contact.com/downloads/steckverbindersystem-raster-2,5-mm.pdf#page=15), generated with kicad-footprint-generator
@@ -56636,6 +56384,118 @@ One digit LED 7 segment SA39-11 SC39-11 SA39-12 SC39-12
 0
 10
 10
+ECE
+ARD_UNO
+
+
+0
+32
+32
+ECE
+BNC_BLK_SLD
+
+Mounting Hole
+0
+2
+2
+ECE
+Bourns_PTV09_Horiz
+Pot
+R
+0
+5
+5
+ECE
+CUE_CMA-4544PF-W
+CMA-4544PF-W
+M
+0
+2
+2
+ECE
+CUE_SJ1-352XNG
+8 pins DIL package, elliptical pads
+3.5mm Jack
+0
+5
+5
+ECE
+IND_TDK_SL1923
+0.4" Resistance
+R
+0
+2
+2
+ECE
+LTC-4727JR
+
+
+0
+14
+14
+ECE
+Multicomp_2144
+Multicomp (also SPC) 2144 Power Entry Connector, IEC 320
+
+0
+5
+5
+ECE
+OLED_Display_1.3
+
+
+0
+7
+7
+ECE
+OLED_Display_2.42_copy
+
+
+0
+7
+7
+ECE
+RDA5807M_Module_SM
+
+
+0
+10
+10
+ECE
+RDA5807M_Module_TH
+
+
+0
+10
+10
+ECE
+RPi_Pico_SM
+
+
+0
+43
+43
+ECE
+RPi_Pico_TH
+
+
+0
+40
+40
+ECE
+STM32_F4
+STM32 F4 Discovery Header
+STM32F4 Discovery
+0
+104
+104
+ECE
+Transformer_Block_AVB_03526
+https://www.block.eu/en_EN/productversion/avb-03526/
+Block PCB Transformer
+0
+8
+8
 Ferrite_THT
 LairdTech_28C0236-0JW-10
 Ferrite, vertical, LairdTech 28C0236-0JW-10, https://assets.lairdtech.com/home/brandworld/files/28C0236-0JW-10.pdf, JW Miller core https://www.bourns.com/products/magnetic-products/j.w.-miller-through-hole-ferrite-beads-emi-filters
@@ -96585,255 +96445,3 @@ Varistor VF
 0
 2
 2
-arduino-library
-Arduino_101_Shield
-https://docs.arduino.cc/retired/boards/arduino-101-619
-
-0
-38
-38
-arduino-library
-Arduino_Due_Shield
-https://docs.arduino.cc/hardware/due
-
-0
-92
-91
-arduino-library
-Arduino_Giga_R1_WiFi_Shield
-https://docs.arduino.cc/hardware/giga-r1-wifi
-
-0
-92
-91
-arduino-library
-Arduino_Leonardo_Shield
-https://docs.arduino.cc/hardware/leonardo
-
-0
-38
-37
-arduino-library
-Arduino_M0_Pro_Shield
-https://docs.arduino.cc/retired/boards/arduino-m0-pro
-
-0
-38
-37
-arduino-library
-Arduino_MKR_1000_WiFi_Socket
-https://docs.arduino.cc/hardware/mkr-1000-wifi
-
-0
-28
-28
-arduino-library
-Arduino_MKR_FOX_1200_Socket
-https://docs.arduino.cc/hardware/mkr-fox-1200
-
-0
-28
-28
-arduino-library
-Arduino_MKR_Vidor_4000_Socket
-https://docs.arduino.cc/hardware/mkr-vidor-4000
-
-0
-28
-28
-arduino-library
-Arduino_MKR_WiFi_1010_Socket
-https://docs.arduino.cc/hardware/mkr-wifi-1010
-
-0
-28
-28
-arduino-library
-Arduino_MKR_Zero_Socket
-https://docs.arduino.cc/hardware/mkr-zero
-
-0
-28
-28
-arduino-library
-Arduino_Mega2560_R3_Shield
-https://docs.arduino.cc/hardware/mega-2560
-
-0
-92
-91
-arduino-library
-Arduino_Micro_Socket
-https://docs.arduino.cc/hardware/micro
-
-0
-34
-32
-arduino-library
-Arduino_Mini_Socket
-https://docs.arduino.cc/retired/boards/arduino-mini-05
-
-0
-35
-35
-arduino-library
-Arduino_Mini_Socket_NoSPH
-https://docs.arduino.cc/retired/boards/arduino-mini-05
-
-0
-30
-30
-arduino-library
-Arduino_Nano_33_IoT_Socket
-https://docs.arduino.cc/hardware/nano-33-iot
-
-0
-30
-30
-arduino-library
-Arduino_Nano_33_IoT_Tile
-https://docs.arduino.cc/hardware/nano-33-iot
-
-0
-30
-30
-arduino-library
-Arduino_Nano_ESP32_Socket
-https://docs.arduino.cc/hardware/nano-esp32
-
-0
-30
-30
-arduino-library
-Arduino_Nano_ESP32_Tile
-https://docs.arduino.cc/hardware/nano-esp32
-
-0
-30
-30
-arduino-library
-Arduino_Nano_Every_Socket
-https://docs.arduino.cc/hardware/nano-every
-
-0
-30
-30
-arduino-library
-Arduino_Nano_Every_Tile
-https://docs.arduino.cc/hardware/nano-every
-
-0
-30
-30
-arduino-library
-Arduino_Nano_Socket
-https://docs.arduino.cc/hardware/nano
-
-0
-30
-30
-arduino-library
-Arduino_Nicla_Vision_Socket
-https://docs.arduino.cc/hardware/nicla-vision
-
-0
-19
-18
-arduino-library
-Arduino_Nicla_Vision_Tile
-https://docs.arduino.cc/hardware/nicla-vision
-
-0
-19
-18
-arduino-library
-Arduino_Nicla_Voice_Socket
-https://docs.arduino.cc/hardware/nicla-voice
-
-0
-19
-17
-arduino-library
-Arduino_Nicla_Voice_Tile
-https://docs.arduino.cc/hardware/nicla-voice
-
-0
-19
-17
-arduino-library
-Arduino_Pro_Mini_Socket
-https://docs.arduino.cc/retired/boards/arduino-pro-mini
-
-0
-34
-34
-arduino-library
-Arduino_Pro_Mini_Socket_NoSPH
-https://docs.arduino.cc/retired/boards/arduino-pro-mini
-
-0
-28
-28
-arduino-library
-Arduino_Uno_R2_Shield
-https://startingelectronics.org/articles/arduino/uno-r3-r2-differences/
-
-0
-34
-34
-arduino-library
-Arduino_Uno_R3_Shield
-https://docs.arduino.cc/hardware/uno-rev3
-
-0
-38
-37
-arduino-library
-Arduino_Uno_R4_Minima_Shield
-https://docs.arduino.cc/hardware/uno-r4-minima
-
-0
-38
-38
-arduino-library
-Arduino_Uno_R4_WiFi_Shield
-https://docs.arduino.cc/hardware/uno-r4-wifi
-
-0
-47
-46
-arduino-library
-Arduino_Zero_Shield
-https://docs.arduino.cc/hardware/zero
-
-0
-38
-38
-arduino-library
-Clone_Mega2560_Pro_Socket
-https://docs.arduino.cc/hardware/mega-2560
-
-0
-86
-86
-arduino-library
-Clone_Pro_Mini_Socket
-https://www.addicore.com/Pro-Mini-p/ad249.htm
-
-0
-35
-35
-arduino-library
-Clone_Pro_Mini_Socket_NoSPH
-https://www.addicore.com/Pro-Mini-p/ad249.htm
-
-0
-29
-29
-footprints
-AWHSH1xxD00G_AMP
-
-AWHSH105D00G 
-0
-4
-4
