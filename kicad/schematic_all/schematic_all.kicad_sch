@@ -4,6 +4,12 @@
 	(generator_version "8.0")
 	(uuid "017a32bd-a431-4565-87b4-2161296abf15")
 	(paper "A4")
+	(title_block
+		(title "ECE 299 - Alarm Clock Radio")
+		(date "2024-05-21")
+		(rev "6")
+		(company "Thomas Cool & Andrew Fischer")
+	)
 	(lib_symbols
 		(symbol "Amplifier_Audio:LM386"
 			(pin_names
@@ -4214,6 +4220,12 @@
 		(uuid "c80b1e9a-7e4a-4ee5-9bd8-039938273867")
 	)
 	(junction
+		(at 261.62 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d0050c81-59fa-4cfc-83bb-782edb0cadc8")
+	)
+	(junction
 		(at 77.47 63.5)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4254,6 +4266,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "fc42438f-569f-415f-bb60-00ce742fc17d")
+	)
+	(junction
+		(at 232.41 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fe7e48ab-12e3-490c-91b0-65412fb10d07")
 	)
 	(no_connect
 		(at 132.08 86.36)
@@ -4359,7 +4377,7 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 127) (xy 233.68 127)
+			(xy 231.14 127) (xy 232.41 127)
 		)
 		(stroke
 			(width 0)
@@ -4436,6 +4454,16 @@
 			(type default)
 		)
 		(uuid "16248dc1-dbb1-4a4b-a6a7-535989e1dde1")
+	)
+	(wire
+		(pts
+			(xy 260.35 132.08) (xy 260.35 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1764da79-309d-466d-bb7f-f7cd1e6c607e")
 	)
 	(wire
 		(pts
@@ -5019,6 +5047,16 @@
 	)
 	(wire
 		(pts
+			(xy 232.41 127) (xy 233.68 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7663ae96-17c5-42f7-a246-10fc2a7a6838")
+	)
+	(wire
+		(pts
 			(xy 53.34 119.38) (xy 59.69 119.38)
 		)
 		(stroke
@@ -5446,16 +5484,6 @@
 			(type default)
 		)
 		(uuid "d760ad3a-7c53-4847-9c6e-21f41dc9b413")
-	)
-	(wire
-		(pts
-			(xy 260.35 148.59) (xy 260.35 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d879f62e-9afb-4ed1-a1a7-5db34c8a053f")
 	)
 	(wire
 		(pts
@@ -7552,6 +7580,72 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 261.62 129.54 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "37cc5a12-465a-4bb3-bdd7-02185c9c2001")
+		(property "Reference" "TP6"
+			(at 262.89 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 262.89 122.682 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+			(at 266.7 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 266.7 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 261.62 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ae102846-299f-4aaf-80b0-dbe9cb1feaa6")
+		)
+		(instances
+			(project "schematic_all"
+				(path "/017a32bd-a431-4565-87b4-2161296abf15"
+					(reference "TP6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+12V")
 		(at 29.21 20.32 0)
 		(unit 1)
@@ -7812,6 +7906,72 @@
 			(project "schematic_all"
 				(path "/017a32bd-a431-4565-87b4-2161296abf15"
 					(reference "SW3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 232.41 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5d72ca4b-3f3d-4511-8f10-077cee4fd4bf")
+		(property "Reference" "TP7"
+			(at 230.632 116.332 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 228.346 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+			(at 237.49 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 237.49 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 232.41 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2f38bde0-bf34-494f-b3c7-73ba51cc6616")
+		)
+		(instances
+			(project "schematic_all"
+				(path "/017a32bd-a431-4565-87b4-2161296abf15"
+					(reference "TP7")
 					(unit 1)
 				)
 			)
