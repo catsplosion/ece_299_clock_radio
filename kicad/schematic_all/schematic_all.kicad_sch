@@ -6262,7 +6262,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_Small_US")
+		(lib_id "Device:C_Small")
 		(at 228.6 127 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6272,22 +6272,22 @@
 		(fields_autoplaced yes)
 		(uuid "01d7621b-89b7-4e03-9e69-16b7aac0886a")
 		(property "Reference" "C1"
-			(at 228.1682 120.65 90)
+			(at 228.6063 120.65 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "100uF"
-			(at 228.1682 123.19 90)
+		(property "Value" "220nF"
+			(at 228.6063 123.19 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 228.6 127 0)
 			(effects
 				(font
@@ -6305,7 +6305,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Polarized capacitor, small US symbol"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 228.6 127 0)
 			(effects
 				(font
@@ -9148,7 +9148,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_Small_US")
+		(lib_id "Device:C_Small")
 		(at 228.6 139.7 0)
 		(mirror y)
 		(unit 1)
@@ -9166,7 +9166,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "100uF"
+		(property "Value" "220nF"
 			(at 231.14 138.4365 0)
 			(effects
 				(font
@@ -9175,7 +9175,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 228.6 139.7 0)
 			(effects
 				(font
@@ -9193,7 +9193,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Polarized capacitor, small US symbol"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 228.6 139.7 0)
 			(effects
 				(font
