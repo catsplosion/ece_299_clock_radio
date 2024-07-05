@@ -23813,7 +23813,7 @@
 			)
 		)
 	)
-	(gr_text "2024 : ver. 2.7"
+	(gr_text "2024 : ver. 2.8"
 		(at 132.969 113.792 0)
 		(layer "F.SilkS")
 		(uuid "1018de64-1f94-47e8-9332-5a510620fcb5")
@@ -24009,14 +24009,6 @@
 		(layer "F.Cu")
 		(net 3)
 		(uuid "d3c38377-9253-452d-97e5-756e8fdd4650")
-	)
-	(segment
-		(start 104.38 64.77)
-		(end 99.155 64.77)
-		(width 0.508)
-		(layer "F.Cu")
-		(net 4)
-		(uuid "c52dae3e-e803-4912-b1d3-f501404838af")
 	)
 	(segment
 		(start 114.828 94.508)
@@ -25057,6 +25049,14 @@
 		(layer "B.Cu")
 		(net 51)
 		(uuid "e88d57ac-56c4-4278-8717-5fbd5687f4f5")
+	)
+	(segment
+		(start 104.38 64.77)
+		(end 99.155 64.77)
+		(width 0.508)
+		(layer "B.Cu")
+		(net 53)
+		(uuid "c52dae3e-e803-4912-b1d3-f501404838af")
 	)
 	(zone
 		(net 4)
