@@ -7,7 +7,7 @@
 	(title_block
 		(title "ECE 299 - Alarm Clock Radio")
 		(date "2024-05-21")
-		(rev "6")
+		(rev "2.7")
 		(company "Thomas Cool & Andrew Fischer")
 	)
 	(lib_symbols
@@ -6279,7 +6279,7 @@
 				)
 			)
 		)
-		(property "Value" "220nF"
+		(property "Value" "100uF"
 			(at 228.1682 123.19 90)
 			(effects
 				(font
@@ -6970,7 +6970,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "23b87c8a-ccf9-4379-aba0-9fe76bbf2574")
-		(property "Reference" "J1"
+		(property "Reference" "PWR1"
 			(at 31.75 29.2099 90)
 			(effects
 				(font
@@ -7024,7 +7024,7 @@
 		(instances
 			(project ""
 				(path "/017a32bd-a431-4565-87b4-2161296abf15"
-					(reference "J1")
+					(reference "PWR1")
 					(unit 1)
 				)
 			)
@@ -9166,7 +9166,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "220nF"
+		(property "Value" "100uF"
 			(at 231.14 138.4365 0)
 			(effects
 				(font
@@ -11079,7 +11079,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 199.39 140.97 0)
 			(effects
 				(font
