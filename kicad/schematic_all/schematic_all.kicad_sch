@@ -4196,6 +4196,12 @@
 		(uuid "a9ce4fec-4652-4539-8f47-394071487c85")
 	)
 	(junction
+		(at 238.76 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a9ec598f-4fe0-42ae-bec7-ea814581e614")
+	)
+	(junction
 		(at 170.18 66.04)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4220,12 +4226,6 @@
 		(uuid "c80b1e9a-7e4a-4ee5-9bd8-039938273867")
 	)
 	(junction
-		(at 261.62 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d0050c81-59fa-4cfc-83bb-782edb0cadc8")
-	)
-	(junction
 		(at 77.47 63.5)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4242,12 +4242,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ee8b529b-8c50-45a8-8521-f550d076c68a")
-	)
-	(junction
-		(at 238.76 110.49)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f2848984-d74d-47f6-bf4f-85178054cd8c")
 	)
 	(junction
 		(at 120.65 93.98)
@@ -4417,7 +4411,7 @@
 	)
 	(wire
 		(pts
-			(xy 251.46 110.49) (xy 251.46 113.03)
+			(xy 251.46 109.22) (xy 251.46 111.76)
 		)
 		(stroke
 			(width 0)
@@ -4537,7 +4531,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 110.49) (xy 251.46 110.49)
+			(xy 247.65 109.22) (xy 251.46 109.22)
 		)
 		(stroke
 			(width 0)
@@ -5037,7 +5031,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 110.49) (xy 242.57 110.49)
+			(xy 238.76 109.22) (xy 242.57 109.22)
 		)
 		(stroke
 			(width 0)
@@ -5217,16 +5211,6 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 110.49) (xy 238.76 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "92596b79-f1d9-4ff8-a31e-d4cbe878ab39")
-	)
-	(wire
-		(pts
 			(xy 236.22 58.42) (xy 246.38 58.42)
 		)
 		(stroke
@@ -5327,7 +5311,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 104.14) (xy 238.76 110.49)
+			(xy 238.76 104.14) (xy 238.76 109.22)
 		)
 		(stroke
 			(width 0)
@@ -5404,6 +5388,16 @@
 			(type default)
 		)
 		(uuid "c072bed7-27b8-4dea-97f9-25a8362855fd")
+	)
+	(wire
+		(pts
+			(xy 238.76 109.22) (xy 238.76 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c3392476-d1fe-434d-9bf8-df2bac54e521")
 	)
 	(wire
 		(pts
@@ -7580,72 +7574,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 261.62 129.54 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "37cc5a12-465a-4bb3-bdd7-02185c9c2001")
-		(property "Reference" "TP6"
-			(at 262.89 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 262.89 122.682 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
-			(at 266.7 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 266.7 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 261.62 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ae102846-299f-4aaf-80b0-dbe9cb1feaa6")
-		)
-		(instances
-			(project "schematic_all"
-				(path "/017a32bd-a431-4565-87b4-2161296abf15"
-					(reference "TP6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+12V")
 		(at 29.21 20.32 0)
 		(unit 1)
@@ -8317,7 +8245,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Polarized_Small_US")
-		(at 245.11 110.49 90)
+		(at 245.11 109.22 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8326,7 +8254,7 @@
 		(dnp no)
 		(uuid "68952d29-4e84-458a-b7c0-a6e39606ea77")
 		(property "Reference" "C10"
-			(at 245.364 104.14 90)
+			(at 245.364 102.87 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8334,7 +8262,7 @@
 			)
 		)
 		(property "Value" "680uF"
-			(at 245.364 106.68 90)
+			(at 245.364 105.41 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8342,7 +8270,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
-			(at 245.11 110.49 0)
+			(at 245.11 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8351,7 +8279,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 245.11 110.49 0)
+			(at 245.11 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8360,7 +8288,7 @@
 			)
 		)
 		(property "Description" "Polarized capacitor, small US symbol"
-			(at 245.11 110.49 0)
+			(at 245.11 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10163,7 +10091,7 @@
 	)
 	(symbol
 		(lib_id "power:Earth")
-		(at 251.46 113.03 0)
+		(at 251.46 111.76 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10173,7 +10101,7 @@
 		(fields_autoplaced yes)
 		(uuid "b3ee96fd-ec61-4b83-8999-a326986697d0")
 		(property "Reference" "#PWR029"
-			(at 251.46 119.38 0)
+			(at 251.46 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10182,7 +10110,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 251.46 118.11 0)
+			(at 251.46 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10190,7 +10118,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 251.46 113.03 0)
+			(at 251.46 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10199,7 +10127,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 251.46 113.03 0)
+			(at 251.46 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10208,7 +10136,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"Earth\""
-			(at 251.46 113.03 0)
+			(at 251.46 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10239,7 +10167,7 @@
 		(dnp no)
 		(uuid "bb8f6a2b-5fd5-4d83-9334-3613c1b239b2")
 		(property "Reference" "C13"
-			(at 257.302 125.73 90)
+			(at 258.572 125.984 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10247,7 +10175,7 @@
 			)
 		)
 		(property "Value" "470uF"
-			(at 257.302 123.19 90)
+			(at 258.572 123.444 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10357,6 +10285,72 @@
 			(project "schematic_all"
 				(path "/017a32bd-a431-4565-87b4-2161296abf15"
 					(reference "#PWR028")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 251.46 129.54 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "bdae9b85-a403-45c9-99e6-12728134aa71")
+		(property "Reference" "TP5"
+			(at 248.92 120.142 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 246.634 122.174 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+			(at 256.54 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 256.54 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 251.46 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "17efbe8f-9d3f-4e85-a988-4e709924f99b")
+		)
+		(instances
+			(project "schematic_all"
+				(path "/017a32bd-a431-4565-87b4-2161296abf15"
+					(reference "TP5")
 					(unit 1)
 				)
 			)
