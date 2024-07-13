@@ -3363,6 +3363,151 @@
 				)
 			)
 		)
+		(symbol "Jumper:Jumper_2_Bridged"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim yes)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "JP"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Jumper_2_Bridged"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Jumper, 2-pole, closed/bridged"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Jumper SPST"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Jumper* TestPoint*2Pads* TestPoint*Bridge*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Jumper_2_Bridged_0_0"
+				(circle
+					(center -2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Jumper_2_Bridged_0_1"
+				(arc
+					(start 1.524 0.254)
+					(mid 0 0.762)
+					(end -1.524 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Jumper_2_Bridged_1_1"
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Mechanical:MountingHole_Pad"
 			(pin_numbers hide)
 			(pin_names
@@ -4257,12 +4402,6 @@
 		(uuid "072d2e52-b983-4f2b-bab7-7e8b50bdfae4")
 	)
 	(junction
-		(at 187.96 130.81)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0cfefad6-a3d5-477b-86ad-d4aa72103f24")
-	)
-	(junction
 		(at 86.36 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4419,6 +4558,12 @@
 		(uuid "f8938d3a-2b05-49d7-8052-d75b26ff4ee5")
 	)
 	(junction
+		(at 209.55 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8c17fc3-f694-46af-801d-f5ac32aec3bf")
+	)
+	(junction
 		(at 29.21 24.13)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4453,10 +4598,6 @@
 	(no_connect
 		(at 96.52 83.82)
 		(uuid "2f4f11ed-55be-4479-8e83-aeb04004a3b5")
-	)
-	(no_connect
-		(at 132.08 60.96)
-		(uuid "37441e3e-df69-4a9d-923f-a9c36f1f861b")
 	)
 	(no_connect
 		(at 208.28 55.88)
@@ -4694,6 +4835,16 @@
 	)
 	(wire
 		(pts
+			(xy 220.98 109.22) (xy 223.52 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "239fa20f-0b12-4fbc-9008-4eaad5a01c94")
+	)
+	(wire
+		(pts
 			(xy 247.65 109.22) (xy 251.46 109.22)
 		)
 		(stroke
@@ -4821,6 +4972,16 @@
 			(type default)
 		)
 		(uuid "417f39e2-5b92-4e07-b380-d320474ca2d9")
+	)
+	(wire
+		(pts
+			(xy 209.55 109.22) (xy 210.82 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41cdcbfd-2cc3-4b51-bb79-ef6328791bf6")
 	)
 	(wire
 		(pts
@@ -5071,6 +5232,16 @@
 			(type default)
 		)
 		(uuid "63bb7bcb-f178-4589-9d0f-f59fa98c79c4")
+	)
+	(wire
+		(pts
+			(xy 209.55 119.38) (xy 212.09 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6440a875-af72-4741-8ad9-639aea799b2e")
 	)
 	(wire
 		(pts
@@ -5364,16 +5535,6 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 130.81) (xy 187.96 130.81)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8f17c7cd-9de9-414e-809b-87f6adc63a7e")
-	)
-	(wire
-		(pts
 			(xy 219.71 119.38) (xy 223.52 119.38)
 		)
 		(stroke
@@ -5514,7 +5675,7 @@
 	)
 	(wire
 		(pts
-			(xy 207.01 119.38) (xy 212.09 119.38)
+			(xy 207.01 119.38) (xy 209.55 119.38)
 		)
 		(stroke
 			(width 0)
@@ -5824,6 +5985,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 60.96) (xy 140.97 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e9712136-9d70-48d6-bff9-df11b8767f06")
+	)
+	(wire
+		(pts
 			(xy 86.36 50.8) (xy 96.52 50.8)
 		)
 		(stroke
@@ -5904,7 +6075,7 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 130.81) (xy 189.23 130.81)
+			(xy 181.61 130.81) (xy 189.23 130.81)
 		)
 		(stroke
 			(width 0)
@@ -6002,6 +6173,16 @@
 		)
 		(uuid "fe3e2277-cfbd-4332-966b-99d61d1af1d3")
 	)
+	(wire
+		(pts
+			(xy 209.55 119.38) (xy 209.55 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe84a5dd-f620-4ab2-8800-0ec55d71fc83")
+	)
 	(label "ENC1_PB"
 		(at 59.69 119.38 0)
 		(fields_autoplaced yes)
@@ -6068,6 +6249,17 @@
 		)
 		(uuid "25ccc421-845d-4f43-82ca-299079d3136f")
 	)
+	(label "ADC"
+		(at 140.97 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "290235e4-d533-4006-9728-4f79b47f89b6")
+	)
 	(label "ENC1_DR"
 		(at 86.36 50.8 0)
 		(fields_autoplaced yes)
@@ -6078,6 +6270,17 @@
 			(justify left bottom)
 		)
 		(uuid "2c082227-fbf2-45a5-81ff-bca51b57f7b3")
+	)
+	(label "ADC"
+		(at 223.52 109.22 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f55503c-7894-48ec-9899-8317ebd04c94")
 	)
 	(label "ENC1_CL"
 		(at 86.36 48.26 0)
@@ -6527,6 +6730,74 @@
 			(project "schematic_all"
 				(path "/017a32bd-a431-4565-87b4-2161296abf15"
 					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Jumper:Jumper_2_Bridged")
+		(at 215.9 109.22 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "09038b29-75fb-475b-bdb4-20b26a69c24b")
+		(property "Reference" "JP1"
+			(at 215.9 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ADCJumper"
+			(at 215.9 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+			(at 215.9 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 215.9 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Jumper, 2-pole, closed/bridged"
+			(at 215.9 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a4ed6aad-c112-4fd7-9187-f5ec99540fe9")
+		)
+		(pin "2"
+			(uuid "e6fdb9da-344c-407e-a1cd-6d683dfb3da7")
+		)
+		(instances
+			(project ""
+				(path "/017a32bd-a431-4565-87b4-2161296abf15"
+					(reference "JP1")
 					(unit 1)
 				)
 			)
@@ -8660,72 +8931,6 @@
 			(project "schematic_all"
 				(path "/017a32bd-a431-4565-87b4-2161296abf15"
 					(reference "H2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 187.96 130.81 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "71ec1d34-07ce-491d-95f2-760b9a38606c")
-		(property "Reference" "TP4"
-			(at 183.134 133.858 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 178.054 136.652 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
-			(at 182.88 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 182.88 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 187.96 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c19a2b23-1885-4c9c-9220-fb04c10f72ab")
-		)
-		(instances
-			(project "schematic_all"
-				(path "/017a32bd-a431-4565-87b4-2161296abf15"
-					(reference "TP4")
 					(unit 1)
 				)
 			)
