@@ -64,12 +64,10 @@ class RotaryEncoder(object):
         self._state = _TTABLE[self._state][index]
 
     def _call_cw_fn(self):
-        print("CW")
         if self._cw_fn:
             self._cw_fn(*self._cw_fn_args)
 
     def _call_ccw_fn(self):
-        print("CCW")
         if self._ccw_fn:
             self._ccw_fn(*self._ccw_fn_args)
 
@@ -95,5 +93,4 @@ class RotaryEncoder(object):
         """
         self._ccw_fn = fn
         self._ccw_fn_args = args
-        
-RotaryEncoder(14,15,2)
+

@@ -1,6 +1,6 @@
 from machine import I2C
 from machine import RTC
-import rda5807
+from rda5807 import Radio
 
 
 MONTHS = {
@@ -20,9 +20,10 @@ MONTHS = {
 
 
 class ClockState():
+   
     def __init__(self):
         self.rtc = RTC()
-        self.rtc.datetime((2024, 1, 1, 1, 0, 0, 0, 0)) #Added argument for weekday
+        self.rtc.datetime((2024, 1, 1, 1, 0, 0, 0, 0))
         self.clock_mode = "12hr"
 
         self.alarm_enabled = False
@@ -33,15 +34,15 @@ class ClockState():
         self.alarm_pattern = 0
         self.alarm_snooze = 5
 
-        self.radio = Radio(I2C(1, scl=7, sda=6, freq=100000))
-        self.radio_enabled = False
-        self.radio_muted = True
+        #self.radio = Radio(I2C(1, scl=7, sda=6, freq=100000))
+        #self.radio_enabled = False
+        #self.radio_muted = True
         
         self.mute_radio(True)
-        self.radio.set_frequency_MHz(100.3)
-        self.radio.bass_boost(False)
-        self.radio.mono(True)
-        self.radio.set_volume(4)
+        #self.radio.set_frequency_MHz(100.3)
+        #self.radio.bass_boost(False)
+        #self.radio.mono(True)
+        #self.radio.set_volume(4)
 
     def set_clock(self, time, mode):
         """
@@ -116,9 +117,9 @@ class ClockState():
         Mute or unmute the radio module.
         mute(bool): Whether to mute or unmute.
         """
-        self.radio.mute(mute)
+        #self.radio.mute(mute)
         regval = 0 if mute else RDA5807M_FLG_DHIZ
-        self.radio.update_reg(RDA5807M_REG_CONFIG, RDA5807M_FLG_DHIZ, regval)
+        #self.radio.update_reg(RDA5807M_REG_CONFIG, RDA5807M_FLG_DHIZ, regval)
         self.radio_muted = mute
 
     def enable_radio(self):
@@ -132,3 +133,4 @@ class ClockState():
         "Turn off the raido."
         self.radio_enabled = False
         self.mute_radio(True)
+        

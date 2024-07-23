@@ -4,11 +4,14 @@
 
 class MenuHandler: #keeping track of what is currently selected, 
         
-    def __init__(self, encoder, accept_button, back_button, state):
-        self.root = Functionality_MenuSelect(None, "root_node") #This creates an attribute local to the instance. Self is automatically passed?
+    def __init__(self, encoder, accept_button, back_button, state, display):
+        
+        self.display = display
+        self.root = Functionality_MenuSelect(None, "root_node", state, display, self) #This creates an attribute local to the instance. Self is automatically passed?
         self._current = self.root
         
-        button.set_button_press(self._buttonpressed) #Note sure if set_button_press is right
+        accept_button.set_press_fn(self._acceptpressed) #Note sure if set_button_press is right
+        back_button.set_press_fn(self._backpressed)
         
         encoder.set_ccw_fn(self._ccw_handler)
         
@@ -22,32 +25,40 @@ class MenuHandler: #keeping track of what is currently selected,
         pass
         
     def render(self):
+        print("in main render")
+        print(self._current)
         #draw square or something (constant)
-        self.current.render(self)
-    
+        self.display.oled.fill(0)
+        self.display.oled.rect(0, 0, 128, 20, 1)
+        self.display.oled.text("Swag Swag Swag", 8, 6)
+        print(self._current.name)
+        self._current.render()
+        self.display.oled.show()
+
     def _ccw_handler(self):
-        self.current.ccw()
+        self._current.ccw()
         
     def _cw_handler(self):
-        self.current.cw()
+        self._current.cw()
         
     def _acceptpressed(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
-        self.current.press()
+        self._current.press()
     
     def _backpressed(self):
-        self.current.back()
+        self._current.back()
 
 
 
 class MenuItem:
-    def __init__(self, parent, name, state, handler=None):
-        
-        print("Created a node with name ", name, "Parent: ", parent)
+    def __init__(self, parent, name, state, display, handler=None):
+
+        print("Created a new node")
         
         self.parent = parent #Attributes 
         self.name = name
         self.handler = handler
         self.state = state
+        self.display = display
         
         if handler is None:
             self.handler = parent
@@ -57,7 +68,7 @@ class MenuItem:
         self.children = [] # Array of MenuItems        
     
     def add_child(self, node): #Append a MenuItem as a child to the current MenuItem
-        self.Children.append(node)
+        self.children.append(node)
         node.parent = self
         return node #so you can actually do stuff with it (ex new = node.add_child(...))
         
@@ -78,8 +89,8 @@ class MenuItem:
         pass
     
 class Functionality_ChangeRGB(MenuItem):
-    def __init__(self, parent, name, state, handler):
-        super().__init__(parent, name, state, handler)
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler)
         
         self.selections = ['r', 'g', 'b']
         self.index = 0
@@ -104,11 +115,15 @@ class Functionality_ChangeRGB(MenuItem):
             index += 1
     
     def back(self):
-        handler.current = self.parent
+        self.handler._current = self.parent
+        self.handler.render()
     
+    def render(self):
+        self.display.oled.text("RGB stuff", 0, 36)
+        
 class Functionality_ChangeTimeFormat(MenuItem):
-    def __init__(self, parent, name, state, handler):
-        super().__init__(parent, name, state, handler)
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler)
     
     def ccw(self):
         clockstate.clock_12hr = False
@@ -120,13 +135,16 @@ class Functionality_ChangeTimeFormat(MenuItem):
         pass
     
     def back(self):
-        handler.current = self.parent
-
+        self.handler._current = self.parent
+        self.handler.render()
+        
+    def render(self):
+        self.display.oled.text("Time stuff", 0, 36)
 
 class Functionality_FrequencyChange(MenuItem): 
     
-    def __init__(self, parent, name, state, handler):
-        super().__init__(parent, name, state, handler)
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler)
         
         self.selections = [10, 0.2]
         self.index = 0
@@ -141,11 +159,16 @@ class Functionality_FrequencyChange(MenuItem):
         index = 0 if index else 1
     
     def back(self):
-        handler.current = self.parent
+        self.handler._current = self.parent
+        self.handler.render()
+        
+    def render(self):
+        self.display.oled.text("Frequency stuff", 0, 36)
+        
 
 class Functionality_AlarmTime(MenuItem):
-    def __init__(self, parent, name, state, handler):
-        super().__init__(parent, name, state, handler)
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler)
         
         self.selections = ["hour", "minute"]
         self.index = 0
@@ -160,51 +183,59 @@ class Functionality_AlarmTime(MenuItem):
         index = 0 if index else 1
     
     def back(self):
-        handler.current = self.parent
+        print(self.parent.name)
+        self.handler._current = self.parent
+        print(self.handler)
+        self.handler.render()
+        
+    def render(self):
+        self.display.oled.text("Alarm stuff", 0, 36)
+        pass
 
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
     
-    def __init__(self, parent, name, state, handler):
-        super().__init__(parent, name, state, handler) #function super() makes it so that it initalizes all the methods in MenuItem (goofy python moment)
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler) #function super() makes it so that it initalizes all the methods in MenuItem (goofy python moment)
         
         self.index = 0
     
-    def ccw(self, handler):
-        if(self.index < len(handler.current.children)):
+    def ccw(self):
+        if(self.index < len(self.handler._current.children) -1):
             self.index += 1
         else:
             self.index = 0
         
-        self.hanlder.render()
+        self.handler.render()
         
-        print(children[index].name)
+        print(self.children[self.index].name)
     
     def cw(self):
         if(self.index > 0):
             self.index -= 1 #Reminder: self. refrences the attribute to that object, if it was just Index = then thats a local var
         else:
-            self.index = (len(current.children) - 1)
+            self.index = (len(self.handler._current.children) - 1)
+
             
-        self.hanlder.render()
+        self.handler.render()
             
-        print(children[index].name)
+        print(self.children[self.index].name)
         
     def press(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
         
-        hanlder._current = self.children[self.index]
+        self.handler._current = self.children[self.index]
+        print("Pressed!")
         self.index = 0
         
-        self.hanlder.render()
+        self.handler.render()
 
     
     def back(self):
-        handler._current = self.parent
+        self.handler._current = self.parent
         
-        self.hanlder.render()
+        self.handler._current.render()
 
     
     def render(self):
+        self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
         pass
     
-
-
