@@ -32,6 +32,7 @@ _CLOCK_24HR = 1
 
 
 class ClockState():
+
     def __init__(self):
         self.rtc = RTC()
         self.rtc.datetime((2024, 1, 1, 0, 0, 0, 0, 0))

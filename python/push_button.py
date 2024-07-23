@@ -121,3 +121,4 @@ class PushButton(object):
         """
         self._press_fn = fn
         self._press_fn_args = args
+
