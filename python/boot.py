@@ -14,12 +14,11 @@ def update_handler(timer):
     state.update()
 
 if __name__ == "__main__":
-    encoder = RotaryEncoder(3 ,4)
+    encoder = RotaryEncoder(3, 4)
     accept_button = PushButton(5)
     back_button = PushButton(10)
-    display = Oled(18,19,21,20,17)
+    display = Oled(18, 19, 21, 20, 17)
 
-    state = ClockState()
     menu_handler = menu.MenuHandler(encoder, accept_button, back_button, state, display)
 
     alarm_time = menu.Functionality_AlarmTime(None, "Set Alarm", state, display, menu_handler)

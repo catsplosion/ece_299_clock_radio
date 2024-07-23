@@ -60,6 +60,8 @@ class ClockState():
 
         self.mute_radio()
 
+        self.led_color = (0, 0, 0)
+
     def update(self):
         """
         Update the state of the clock based on the current RTC time.
@@ -155,9 +157,16 @@ class ClockState():
     def set_clock_mode(self, mode):
         """
         Set the clock's display mode.
-        mode(str): Clock display mode. _CLOCK_12HR or _CLOCK_24HR
+        mode(str): Clock display mode: "12hr" or "24hr".
         """
-        self.clock_mode = mode
+        self.clock_mode = _CLOCK_24HR if mode == "24hr" else _CLOCK_12HR
+
+    def get_clock_mode_string(self):
+        """
+        Return the name of the current clock mode as a string.
+        """
+        mstring = "12hr" if self.clock_mode == _CLOCK_12HR else "24hr"
+        return mstring
 
     def get_clock_string(self):
         """
@@ -198,7 +207,30 @@ class ClockState():
         self.alarm_pattern = pattern or self.alarm_pattern
         self.alarm_stime = snooze or self.alarm_stime
 
+        self.alarm_time[0] = self.alarm_time[0] % 24
+        self.alarm_time[1] = self.alarm_time[1] % 60
+        self.alarm_time[2] = self.alarm_time[2] % 60
+
         self.alarm_volume = max(min(15, self.alarm_volume), 1)
+
+    def get_alarm_string(self):
+        """
+        Return the current alarm value.
+
+        Returns:
+            (hour, min, sec)
+        """
+        atime = self.alarm_time
+
+        astring = "?:?:?"
+        if self.clock_mode == _CLOCK_12HR:
+            hours = (atime[0] - 1) % 12 + 1
+            mod = "am" if atime[0] < 12 else "pm"
+            astring = "{: 2d}:{:02d}:{:02d} {}".format(hours, *atime[1:], mod)
+        elif self.clock_mode == _CLOCK_24HR:
+            astring = "{:02d}:{:02d}:{:02d}".format(*atime)
+
+        return astring
 
     def enable_alarm(self):
         """
@@ -231,8 +263,8 @@ class ClockState():
         volume(int): Volume of the radio. 0 is lowest, 15 is highest.
         """
         if freq:
-            if (freq * 10) % 2 != 1:
-                return
+            freq = round(freq * 10) / 10
+            freq = max(min(freq, 108.1), 88.1)
 
             self.radio_freq = freq
             self.radio.set_frequency_MHz(freq)
@@ -270,3 +302,14 @@ class ClockState():
         "Turn off the radio."
         self.radio_enabled = False
         self.mute_radio()
+
+    def set_led_color(self, color):
+        """
+        Set the color of the LEDs.
+        color(tuple): Three-tuple of the components. (r, g, b)
+        """
+        self.led_color = (
+            max(min(color[0], 255), 0),
+            max(min(color[1], 255), 0),
+            max(min(color[2], 255), 0)
+        )
