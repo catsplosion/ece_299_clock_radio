@@ -72,7 +72,10 @@ class ClockState():
                 self._sound_alarm()
 
         elif self.alarm_state == _ALARM_SNOOZE:
-            if self.get_time()[2] - self.alarm_stime[2] >= self.alarm_sdelay:
+            now = self.get_time()
+            seconds = (now[1] - self.alarm_stime[1])*60
+            seconds += now[2] - self.alarm_stime[2]
+            if seconds >= self.alarm_sdelay:
                 self.alarm_state = _ALARM_SOUND
                 self._sound_alarm()
 
@@ -108,6 +111,9 @@ class ClockState():
         )
 
     def _pwm_pattern_handler(self, timer):
+        if self.alarm_state != _ALARM_SOUND:
+            self._unsound_alarm()
+
         if self._pwm_tick % 2 == 0:
             self._pwm_set_freq(370)
         else:
@@ -170,29 +176,24 @@ class ClockState():
 
     def get_clock_string(self):
         """
-        Return the clock values as a 3-tuple of strings.
+        Return the clock values as a 2-tuple of strings.
 
         Returns:
-            (time, date, am/pm)
+            (time, date)
         """
         now = self.rtc.datetime()
 
         tstring = "?:?:?"
         if self.clock_mode == _CLOCK_12HR:
-            hours = now[4] % 12 + 1
-            tstring = "{: 2d}:{:02d}:{:02d}".format(hours, *now[5:7])
+            hours = (now[4] - 1) % 12 + 1
+            mod = "am" if now[4] < 12 else "pm"
+            tstring = "{: 2d}:{:02d}:{:02d} {}".format(hours, *now[5:7], mod)
         elif self.clock_mode == _CLOCK_24HR:
             tstring = "{:02d}:{:02d}:{:02d}".format(*now[4:7])
 
         dstring = "{} {}, {}".format(MONTHS[now[1]], now[2], now[0])
 
-        astring = None
-        if self.clock_mode == _CLOCK_12HR:
-            astring = "am" if now[0] < 12 else "pm"
-        elif self.clock_mode == _CLOCK_24HR:
-            astring = ""
-
-        return tstring, dstring, astring
+        return tstring, dstring
 
     def set_alarm(self, time=None, volume=None, pattern=None, snooze=None):
         """
@@ -260,9 +261,15 @@ class ClockState():
         if self.alarm_state != _ALARM_SOUND:
             return
 
-        self.alarm_state = _ALARM_SNOOZE
         self.alarm_stime = self.get_time()
         self._unsound_alarm()
+        self.alarm_state = _ALARM_SNOOZE
+
+    def alarm_sounding(self):
+        """
+        Return if the alarm is currently snoozed.
+        """
+        return self.alarm_state == _ALARM_SOUND
 
     def set_radio(self, freq=None, volume=None):
         """

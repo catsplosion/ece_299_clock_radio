@@ -5,7 +5,7 @@
 
 class MenuHandler: #keeping track of what is currently selected,
     def __init__(self, encoder, accept_button, back_button, state, display):
-
+        self.state = state
         self.display = display
         self.root = Functionality_MenuSelect(None, "root_node", state, display, self) #This creates an attribute local to the instance. Self is automatically passed?
         self._current = self.root
@@ -29,18 +29,34 @@ class MenuHandler: #keeping track of what is currently selected,
         print("")
 
     def _ccw_handler(self):
+        if self.state.alarm_sounding():
+            self.state.snooze_alarm()
+            return
+
         self._current.ccw()
         self.render()
 
     def _cw_handler(self):
+        if self.state.alarm_sounding():
+            self.state.snooze_alarm()
+            return
+
         self._current.cw()
         self.render()
 
     def _acceptpressed(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
+        if self.state.alarm_sounding():
+            self.state.snooze_alarm()
+            return
+
         self._current.press()
         self.render()
 
     def _backpressed(self):
+        if self.state.alarm_sounding():
+            self.state.snooze_alarm()
+            return
+
         self._current.back()
         self.render()
 
