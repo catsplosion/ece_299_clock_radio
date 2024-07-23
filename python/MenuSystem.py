@@ -223,6 +223,49 @@ class Functionality_Toggle(MenuItem):
         print(message, end="")
 
 
+class Functionality_Roller(MenuItem):
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler)
+
+        self._value = None
+        self._increment = 1
+
+        self._set_fn = None
+        self._get_fn = None
+
+    def set_roller_fns(self, set_fn, get_fn, increment=1):
+        self._set_fn = set_fn
+        self._get_fn = get_fn
+        self._increment = increment
+
+        self._value = self._get_fn()
+
+    def ccw(self):
+        if not self._set_fn:
+            return
+
+        self._value -= self._increment
+        self._set_fn(self._value)
+        self._value = self._get_fn()
+
+    def cw(self):
+        if not self._set_fn:
+            return
+
+        self._value += self._increment
+        self._set_fn(self._value)
+        self._value = self._get_fn()
+
+    def render(self):
+        vstring = "<unlinked>"
+        if self._set_fn and self._get_fn:
+            vstring = self._get_fn()
+
+        message = "{}: <{}>".format(self.name, vstring)
+        self.display.oled.text(message, 0, 36)
+        print(message, end="")
+
+
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
     def __init__(self, parent, name, state, display, handler):
         super().__init__(parent, name, state, display, handler) #function super() makes it so that it initalizes all the methods in MenuItem (goofy python moment)

@@ -207,11 +207,19 @@ class ClockState():
         self.alarm_pattern = pattern or self.alarm_pattern
         self.alarm_stime = snooze or self.alarm_stime
 
-        self.alarm_time[0] = self.alarm_time[0] % 24
-        self.alarm_time[1] = self.alarm_time[1] % 60
-        self.alarm_time[2] = self.alarm_time[2] % 60
+        self.alarm_time = (
+            self.alarm_time[0] % 24,
+            self.alarm_time[1] % 60,
+            self.alarm_time[2] % 60
+        )
 
         self.alarm_volume = max(min(15, self.alarm_volume), 1)
+
+    def set_alarm_volume(self, volume):
+        self.set_alarm(volume=volume)
+
+    def get_alarm_volume(self):
+        return self.alarm_volume
 
     def get_alarm_string(self):
         """
@@ -270,8 +278,14 @@ class ClockState():
             self.radio.set_frequency_MHz(freq)
 
         if volume is not None:
-            self.radio_volume = volume
-            self.radio.set_volume(max(min(volume, 15), 0))
+            self.radio_volume = max(min(volume, 15), 0)
+            self.radio.set_volume(self.radio_volume)
+
+    def set_radio_volume(self, volume):
+        self.set_radio(volume=volume)
+
+    def get_radio_volume(self):
+        return self.radio_volume
 
     def mute_radio(self):
         """

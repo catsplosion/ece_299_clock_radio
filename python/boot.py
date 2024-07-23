@@ -32,8 +32,14 @@ if __name__ == "__main__":
     mute_radio = menu.Functionality_Toggle(None, "Mute Radio", state, display, menu_handler)
     mute_radio.set_toggle_fns(state.mute_radio, state.unmute_radio)
 
+    radio_volume = menu.Functionality_Roller(None, "Radio Volume", state, display, menu_handler)
+    radio_volume.set_roller_fns(state.set_radio_volume, state.get_radio_volume, 1)
+
     toggle_alarm = menu.Functionality_Toggle(None, "Enable Alarm", state, display, menu_handler)
     toggle_alarm.set_toggle_fns(state.enable_alarm, state.disable_alarm)
+
+    alarm_volume = menu.Functionality_Roller(None, "Alarm Volume", state, display, menu_handler)
+    alarm_volume.set_roller_fns(state.set_alarm_volume, state.get_alarm_volume, 1)
 
     menu_handler.root.add_child(alarm_time)
     menu_handler.root.add_child(change_rgb)
@@ -42,6 +48,8 @@ if __name__ == "__main__":
     menu_handler.root.add_child(toggle_radio)
     menu_handler.root.add_child(mute_radio)
     menu_handler.root.add_child(toggle_alarm)
+    menu_handler.root.add_child(radio_volume)
+    menu_handler.root.add_child(alarm_volume)
 
     menu_handler.render()
 
