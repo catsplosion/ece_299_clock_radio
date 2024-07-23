@@ -72,7 +72,8 @@ class MenuItem:
         pass
 
     def back(self):
-        pass
+        if self.parent:
+            self.handler._current = self.parent
 
     def render(self):
         #special stuff
@@ -104,9 +105,6 @@ class Functionality_ChangeRGB(MenuItem):
         else:
             self.index += 1
 
-    def back(self):
-        self.handler._current = self.parent
-
     def render(self):
         message = "RGB: r={} g={} b={}".format(*self.state.led_color)
         self.display.oled.text(message, 0, 36)
@@ -125,9 +123,6 @@ class Functionality_ChangeTimeFormat(MenuItem):
 
     def press(self):
         pass
-
-    def back(self):
-        self.handler._current = self.parent
 
     def render(self):
         mstring = self.state.get_clock_mode_string()
@@ -159,9 +154,6 @@ class Functionality_FrequencyChange(MenuItem):
     def press(self):
         self.index = 0 if self.index else 1
 
-    def back(self):
-        self.handler._current = self.parent
-
     def render(self):
         message = "Frequency: {:03.1f} ".format(self.state.radio_freq)
         self.display.oled.text(message, 0, 36)
@@ -189,9 +181,6 @@ class Functionality_AlarmTime(MenuItem):
 
     def press(self):
         self.index = 0 if self.index else 1
-
-    def back(self):
-        self.handler._current = self.parent
 
     def render(self):
         astring = self.state.get_alarm_string()
@@ -224,9 +213,6 @@ class Functionality_Toggle(MenuItem):
 
         self._enabled = True
 
-    def back(self):
-        self.handler._current = self.parent
-
     def render(self):
         sstring = "<unlinked>"
         if self._disable_fn or self._enable_fn:
@@ -257,9 +243,6 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
 
     def press(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
         self.handler._current = self.children[self.index]
-
-    def back(self):
-        self.handler._current = self.parent
 
     def render(self):
         self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
