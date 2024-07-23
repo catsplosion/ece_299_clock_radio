@@ -209,6 +209,48 @@ class Functionality_AlarmTime(MenuItem):
         print(message, end="")
 
 
+class Functionality_Toggle(MenuItem):
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler)
+
+        self._enabled = False
+        self._enable_fn = None
+        self._disable_fn = None
+
+    def set_toggle_fns(self, enable_fn, disable_fn):
+        self._enable_fn = enable_fn
+        self._disable_fn = disable_fn
+
+    def ccw(self):
+        if self._enabled and self._disable_fn:
+            self._disable_fn()
+
+        self._enabled = False
+
+        self.handler.render()
+
+    def cw(self):
+        if not self._enabled and self._enable_fn:
+            self._enable_fn()
+
+        self._enabled = True
+
+        self.handler.render()
+
+    def back(self):
+        self.handler._current = self.parent
+        self.handler.render()
+
+    def render(self):
+        sstring = "<unlinked>"
+        if self._disable_fn or self._enable_fn:
+            sstring = "on" if self._enabled else "off"
+
+        message = "{} state: <{}>".format(self.name, sstring)
+        self.display.oled.text(message, 0, 36)
+        print(message, end="")
+
+
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
     def __init__(self, parent, name, state, display, handler):
         super().__init__(parent, name, state, display, handler) #function super() makes it so that it initalizes all the methods in MenuItem (goofy python moment)

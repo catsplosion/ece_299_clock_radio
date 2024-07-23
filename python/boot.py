@@ -26,10 +26,22 @@ if __name__ == "__main__":
     change_time_format = menu.Functionality_ChangeTimeFormat(None, "Change Format", state, display, menu_handler)
     frequency_change = menu.Functionality_FrequencyChange(None, "Change Freq.", state, display, menu_handler)
 
+    toggle_radio = menu.Functionality_Toggle(None, "Enable Radio", state, display, menu_handler)
+    toggle_radio.set_toggle_fns(state.enable_radio, state.disable_radio)
+
+    mute_radio = menu.Functionality_Toggle(None, "Mute Radio", state, display, menu_handler)
+    mute_radio.set_toggle_fns(state.mute_radio, state.unmute_radio)
+
+    toggle_alarm = menu.Functionality_Toggle(None, "Enable Alarm", state, display, menu_handler)
+    toggle_alarm.set_toggle_fns(state.enable_alarm, state.disable_alarm)
+
     menu_handler.root.add_child(alarm_time)
     menu_handler.root.add_child(change_rgb)
     menu_handler.root.add_child(change_time_format)
     menu_handler.root.add_child(frequency_change)
+    menu_handler.root.add_child(toggle_radio)
+    menu_handler.root.add_child(mute_radio)
+    menu_handler.root.add_child(toggle_alarm)
 
     menu_handler.render()
 

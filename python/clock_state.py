@@ -284,7 +284,7 @@ class ClockState():
         """
         Unmute the radio module.
         """
-        self.radio.mute(False)
+        self.radio.mute(not self.radio_enabled)
         self.radio_muted = False
 
     def enable_radio(self):
