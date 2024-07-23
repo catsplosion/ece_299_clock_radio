@@ -22,7 +22,7 @@ MONTHS = {
 class ClockState():
     def __init__(self):
         self.rtc = RTC()
-        self.rtc.datetime((2024, 1, 1, 0, 0, 0, 0))
+        self.rtc.datetime((2024, 1, 1, 1, 0, 0, 0, 0)) #Added argument for weekday
         self.clock_mode = "12hr"
 
         self.alarm_enabled = False
@@ -36,7 +36,7 @@ class ClockState():
         self.radio = Radio(I2C(1, scl=7, sda=6, freq=100000))
         self.radio_enabled = False
         self.radio_muted = True
-        
+
         self.mute_radio(True)
         self.radio.set_frequency_MHz(100.3)
         self.radio.bass_boost(False)
@@ -69,11 +69,11 @@ class ClockState():
             tstring = "{: 2d}:{:02d}:{:02d}".format(hours, now[4:6])
 
         dstring = "{} {}, {}".format(MONTHS[now[1]], now[2], now[0])
-            
+
         astring = None
         if self.clock_mode == "12hr":
             astring = "am" if now[0] < 12 else "pm"
-            
+
         return tstring, dstring, astring
 
     def set_alarm(self, time, volume=4, pattern=0, snooze=5):
@@ -127,7 +127,7 @@ class ClockState():
         """
         self.radio_enabled = True
         self.mute_radio(False)
-    
+
     def disable_radio(self):
         "Turn off the raido."
         self.radio_enabled = False

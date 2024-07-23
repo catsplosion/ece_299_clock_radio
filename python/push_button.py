@@ -6,7 +6,6 @@ _FALLING = 1
 _HOLD_DOWN = 2
 _RISING = 3
 
-
 class PushButton(object):
     """
     Configure a machine.Pin as a push button input. Handles de-bouncing using a
