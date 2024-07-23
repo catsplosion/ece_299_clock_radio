@@ -30,16 +30,19 @@ class MenuHandler: #keeping track of what is currently selected,
 
     def _ccw_handler(self):
         self._current.ccw()
+        self.render()
 
     def _cw_handler(self):
         self._current.cw()
+        self.render()
 
     def _acceptpressed(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
         self._current.press()
+        self.render()
 
     def _backpressed(self):
         self._current.back()
-
+        self.render()
 
 class MenuItem:
     def __init__(self, parent, name, state, display, handler=None):
@@ -88,14 +91,12 @@ class Functionality_ChangeRGB(MenuItem):
         color[self.index] -= 5
 
         self.state.set_led_color(color)
-        self.handler.render()
 
     def cw(self):
         color = list(self.state.led_color)
         color[self.index] += 5
 
         self.state.set_led_color(color)
-        self.handler.render()
 
     def press(self):
         if(self.index == 2):
@@ -105,7 +106,6 @@ class Functionality_ChangeRGB(MenuItem):
 
     def back(self):
         self.handler._current = self.parent
-        self.handler.render()
 
     def render(self):
         message = "RGB: r={} g={} b={}".format(*self.state.led_color)
@@ -119,18 +119,15 @@ class Functionality_ChangeTimeFormat(MenuItem):
 
     def ccw(self):
         self.state.set_clock_mode("12hr")
-        self.handler.render()
 
     def cw(self):
         self.state.set_clock_mode("24hr")
-        self.handler.render()
 
     def press(self):
         pass
 
     def back(self):
         self.handler._current = self.parent
-        self.handler.render()
 
     def render(self):
         mstring = self.state.get_clock_mode_string()
@@ -152,21 +149,18 @@ class Functionality_FrequencyChange(MenuItem):
         freq -= self.selections[self.index]
 
         self.state.set_radio(freq=freq)
-        self.handler.render()
 
     def cw(self):
         freq = self.state.radio_freq
         freq += self.selections[self.index]
 
         self.state.set_radio(freq=freq)
-        self.handler.render()
 
     def press(self):
         self.index = 0 if self.index else 1
 
     def back(self):
         self.handler._current = self.parent
-        self.handler.render()
 
     def render(self):
         message = "Frequency: {:03.1f} ".format(self.state.radio_freq)
@@ -186,21 +180,18 @@ class Functionality_AlarmTime(MenuItem):
         alarm_time[self.index + 1] -= 1
 
         self.state.set_alarm(time=alarm_time)
-        self.handler.render()
 
     def cw(self):
         alarm_time = list(self.state.alarm_time)
         alarm_time[self.index + 1] += 1
 
         self.state.set_alarm(time=alarm_time)
-        self.handler.render()
 
     def press(self):
         self.index = 0 if self.index else 1
 
     def back(self):
         self.handler._current = self.parent
-        self.handler.render()
 
     def render(self):
         astring = self.state.get_alarm_string()
@@ -227,19 +218,14 @@ class Functionality_Toggle(MenuItem):
 
         self._enabled = False
 
-        self.handler.render()
-
     def cw(self):
         if not self._enabled and self._enable_fn:
             self._enable_fn()
 
         self._enabled = True
 
-        self.handler.render()
-
     def back(self):
         self.handler._current = self.parent
-        self.handler.render()
 
     def render(self):
         sstring = "<unlinked>"
@@ -263,25 +249,17 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
         else:
             self.index = 0
 
-        self.handler.render()
-
     def cw(self):
         if(self.index > 0):
             self.index -= 1 #Reminder: self. refrences the attribute to that object, if it was just Index = then thats a local var
         else:
             self.index = (len(self.handler._current.children) - 1)
 
-        self.handler.render()
-
     def press(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
         self.handler._current = self.children[self.index]
 
-        self.handler.render()
-
     def back(self):
         self.handler._current = self.parent
-
-        self.handler._current.render()
 
     def render(self):
         self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
