@@ -1,5 +1,9 @@
+import time
+
 from machine import I2C
+from machine import PWM
 from machine import RTC
+from machine import Timer
 import rda5807
 
 
@@ -18,40 +22,140 @@ MONTHS = {
     12: "Dec"
 }
 
+_ALARM_OFF = 0
+_ALARM_ON = 1
+_ALARM_SOUND = 2
+_ALARM_SNOOZE = 3
+
+_CLOCK_12HR = 0
+_CLOCK_24HR = 1
+
 
 class ClockState():
     def __init__(self):
         self.rtc = RTC()
-        self.rtc.datetime((2024, 1, 1, 1, 0, 0, 0, 0)) #Added argument for weekday
-        self.clock_mode = "12hr"
+        self.rtc.datetime((2024, 1, 1, 0, 0, 0, 0, 0))
+        self.clock_mode = _CLOCK_12HR
 
-        self.alarm_enabled = False
-        self.alarm_on = False
+        self.alarm_state = _ALARM_OFF
         self.alarm_time = (0, 0, 0)
-        self.alarm_last = (0, 0, 0)
-        self.alarm_volume = 4
+        self.alarm_volume = 2
         self.alarm_pattern = 0
-        self.alarm_snooze = 5
+        self.alarm_stime = (0, 0, 0)
+        self.alarm_sdelay = 5
 
-        self.radio = Radio(I2C(1, scl=7, sda=6, freq=100000))
+        self._pwm_tick = 0
+        self._pwm_lohi = False
+        self._pwm = PWM(22)
+        self._pwm.deinit()
+        self._pwm_pattern = Timer()
+        self._pwm_freq = Timer()
+
+        self.radio = rda5807.Radio(I2C(1, scl=7, sda=6, freq=100000))
         self.radio_enabled = False
         self.radio_muted = True
+        self.radio_freq = 100.3
+        self.radio_volume = 2
 
-        self.mute_radio(True)
-        self.radio.set_frequency_MHz(100.3)
-        self.radio.bass_boost(False)
-        self.radio.mono(True)
-        self.radio.set_volume(4)
+        self.mute_radio()
 
-    def set_clock(self, time, mode):
+    def update(self):
         """
-        Set the current clock value.
+        Update the state of the clock based on the current RTC time.
+        """
+        if self.alarm_state == _ALARM_ON:
+            if self.get_time() == self.alarm_time:
+                self.alarm_state = _ALARM_SOUND
+                self._sound_alarm()
+
+        elif self.alarm_state == _ALARM_SNOOZE:
+            if self.get_time()[2] - self.alarm_stime[2] >= self.alarm_sdelay:
+                self.alarm_state = _ALARM_SOUND
+                self._sound_alarm()
+
+    def _sound_alarm(self):
+        self._pwm.freq(300000)
+        self._pwm.duty_u16(0)
+
+        self._pwm_tick = 0
+        self._pwm_pattern.init(
+            mode=Timer.PERIODIC,
+            freq=2,
+            callback=self._pwm_pattern_handler
+        )
+
+        self.radio.update_reg(
+            rda5807.RDA5807M_REG_CONFIG, rda5807.RDA5807M_FLG_DHIZ, 0)
+
+    def _unsound_alarm(self):
+        self.radio.update_reg(
+            rda5807.RDA5807M_REG_CONFIG, rda5807.RDA5807M_FLG_DHIZ,
+            rda5807.RDA5807M_FLG_DHIZ
+        )
+
+        self._pwm_pattern.deinit()
+        self._pwm_freq.deinit()
+        self._pwm.deinit()
+
+    def _pwm_set_freq(self, freq):
+        self._pwm_freq.init(
+            mode=Timer.PERIODIC,
+            freq=freq*2,
+            callback=self._pwm_freq_handler
+        )
+
+    def _pwm_pattern_handler(self, timer):
+        if self._pwm_tick % 2 == 0:
+            self._pwm_set_freq(370)
+        else:
+            self._pwm_set_freq(523)
+
+        self._pwm_tick += 1
+
+    def _pwm_freq_handler(self, timer):
+        if self._pwm_lohi:
+            pwm_volume = int(self.alarm_volume * 64000 / 15)
+            self._pwm.duty_u16(pwm_volume)
+        else:
+            self._pwm.duty_u16(0)
+
+        self._pwm_lohi = not self._pwm_lohi
+
+    def set_time(self, time):
+        """
+        Set the current clock time. Hour is from 0 to 23.
         time(tuple): (hour, minute, second)
-        mode(str): "12hr" or "24hr" mode.
         """
         now = list(self.rtc.datetime())
-        now[3:6] = time
+        now = now[:4] + list(time) + now[7:]
         self.rtc.datetime(now)
+
+    def get_time(self):
+        """
+        Return the current time as a tuple in the form (hour, min, sec).
+        """
+        return self.rtc.datetime()[4:7]
+
+    def set_date(self, date):
+        """
+        Set the current clock date.
+        time(tuple): (year, month, day)
+        """
+        now = list(self.rtc.datetime())
+        now = list(date) + now[3:]
+        self.rtc.datetime(now)
+
+    def get_date(self):
+        """
+        Return the current date as a tuple in the form (year, month, day).
+        """
+        return self.rtc.datetime()[0:3]
+
+    def set_clock_mode(self, mode):
+        """
+        Set the clock's display mode.
+        mode(str): Clock display mode. _CLOCK_12HR or _CLOCK_24HR
+        """
         self.clock_mode = mode
 
     def get_clock_string(self):
@@ -64,71 +168,104 @@ class ClockState():
         now = self.rtc.datetime()
 
         tstring = "?:?:?"
-        if self.clock_mode == "12hr":
-            hours = now[0] % 12 + 1
-            tstring = "{: 2d}:{:02d}:{:02d}".format(hours, now[4:6])
+        if self.clock_mode == _CLOCK_12HR:
+            hours = now[4] % 12 + 1
+            tstring = "{: 2d}:{:02d}:{:02d}".format(hours, *now[5:7])
+        elif self.clock_mode == _CLOCK_24HR:
+            tstring = "{:02d}:{:02d}:{:02d}".format(*now[4:7])
 
         dstring = "{} {}, {}".format(MONTHS[now[1]], now[2], now[0])
 
         astring = None
-        if self.clock_mode == "12hr":
+        if self.clock_mode == _CLOCK_12HR:
             astring = "am" if now[0] < 12 else "pm"
+        elif self.clock_mode == _CLOCK_24HR:
+            astring = ""
 
         return tstring, dstring, astring
 
-    def set_alarm(self, time, volume=4, pattern=0, snooze=5):
+    def set_alarm(self, time=None, volume=None, pattern=None, snooze=None):
         """
         Set the alarm.
-        time(tuple): (hour, minute, second)
+        time(tuple): (hour, min, sec)
         volume(int): 1 to 15 volume, 15 being loudest
         pattern(int): Alarm pattern to play.
         snooze(int): Snooze time in minutes.
         """
-        self.alarm_time = time
-        self.alarm_volume = volume
-        self.alarm_last = (0, 0, 0)
-        self.alarm_pattern = pattern
-        self.alarm_snooze = snooze
+        self.alarm_time = time or self.alarm_time
+        self.alarm_volume = volume or self.alarm_volume
+        self.alarm_pattern = pattern or self.alarm_pattern
+        self.alarm_stime = snooze or self.alarm_stime
+
+        self.alarm_volume = max(min(15, self.alarm_volume), 1)
 
     def enable_alarm(self):
         """
         Enable the alarm for the current alarm settings.
         """
-        self.alarm_enabled = True
-        self.alarm_on = False
+        self.alarm_state = _ALARM_ON
 
     def disable_alarm(self):
         """
         Disable and shut off the alarm.
         """
-        self.alarm_enabled = False
-        self.alarm_on = False
+        self.alarm_state = _ALARM_OFF
+        self._unsound_alarm()
 
     def snooze_alarm(self):
         """
         Snooze the current alarm.
         """
-        self.alarm_on = False
-        self.alarm_last = self.rtc.datetime()[3:6]
+        if self.alarm_state != _ALARM_SOUND:
+            return
 
-    def mute_radio(self, mute=True):
+        self.alarm_state = _ALARM_SNOOZE
+        self.alarm_stime = self.get_time()
+        self._unsound_alarm()
+
+    def set_radio(self, freq=None, volume=None):
         """
-        Mute or unmute the radio module.
-        mute(bool): Whether to mute or unmute.
+        Set the current radio state.
+        freq(float): Station frequency in MHz.
+        volume(int): Volume of the radio. 0 is lowest, 15 is highest.
         """
-        self.radio.mute(mute)
-        regval = 0 if mute else RDA5807M_FLG_DHIZ
-        self.radio.update_reg(RDA5807M_REG_CONFIG, RDA5807M_FLG_DHIZ, regval)
-        self.radio_muted = mute
+        if freq:
+            if (freq * 10) % 2 != 1:
+                return
+
+            self.radio_freq = freq
+            self.radio.set_frequency_MHz(freq)
+
+        if volume is not None:
+            self.radio_volume = volume
+            self.radio.set_volume(max(min(volume, 15), 0))
+
+    def mute_radio(self):
+        """
+        Mute the radio module.
+        """
+        self.radio.mute(True)
+        self.radio_muted = True
+
+    def unmute_radio(self):
+        """
+        Unmute the radio module.
+        """
+        self.radio.mute(False)
+        self.radio_muted = False
 
     def enable_radio(self):
         """
         Turn on the radio.
         """
+        self.radio.bass_boost(False)
+        self.radio.mono(True)
+        self.radio.set_frequency_MHz(self.radio_freq)
+        self.radio.set_volume(self.radio_volume)
         self.radio_enabled = True
-        self.mute_radio(False)
+        self.unmute_radio()
 
     def disable_radio(self):
-        "Turn off the raido."
+        "Turn off the radio."
         self.radio_enabled = False
-        self.mute_radio(True)
+        self.mute_radio()
