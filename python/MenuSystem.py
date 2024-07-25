@@ -1,13 +1,19 @@
-#import rotary_encoder as re
-#import push_button as pb
-#from machine import Pin, SPI
+from machine import Timer
+
+
+_RESET_DELAY = 10000
+_DEBUG = False
+
+def print_debug(*args, **kwds):
+    if _DEBUG:
+        print(*args, **kwds)
 
 
 class MenuHandler: #keeping track of what is currently selected,
     def __init__(self, encoder, accept_button, back_button, state, display):
         self.state = state
         self.display = display
-        self.root = Functionality_MenuSelect(None, "root_node", state, display, self) #This creates an attribute local to the instance. Self is automatically passed?
+        self.root = None #This creates an attribute local to the instance. Self is automatically passed?
         self._current = self.root
 
         encoder.set_ccw_fn(self._ccw_handler)
@@ -15,20 +21,41 @@ class MenuHandler: #keeping track of what is currently selected,
         accept_button.set_press_fn(self._acceptpressed)
         back_button.set_press_fn(self._backpressed)
 
+        self._reset_timer = Timer()
+
     def __del__(self):
         pass
 
+    def _start_reset_timer(self):
+        self._reset_timer.init(
+            mode=Timer.ONE_SHOT,
+            period=_RESET_DELAY,
+            callback=self._reset_timer_handler
+        )
+
+    def _reset_timer_handler(self, timer):
+        self._current = self.root
+        self.render()
+
     def render(self):
+        if not self._current:
+            return
+
         #draw square or something (constant)
         self.display.oled.fill(0)
         self.display.oled.rect(0, 0, 128, 20, 1)
         self.display.oled.text("Swag Swag Swag", 8, 6)
-        print("Swag Swag Swag: ", end="")
+        print_debug("Swag Swag Swag: ", end="")
         self._current.render()
         self.display.oled.show()
-        print("")
+        print_debug("")
 
     def _ccw_handler(self):
+        if not self._current:
+            return
+
+        self._start_reset_timer()
+
         if self.state.alarm_sounding():
             self.state.snooze_alarm()
             return
@@ -37,6 +64,11 @@ class MenuHandler: #keeping track of what is currently selected,
         self.render()
 
     def _cw_handler(self):
+        if not self._current:
+            return
+
+        self._start_reset_timer()
+
         if self.state.alarm_sounding():
             self.state.snooze_alarm()
             return
@@ -45,6 +77,11 @@ class MenuHandler: #keeping track of what is currently selected,
         self.render()
 
     def _acceptpressed(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
+        if not self._current:
+            return
+
+        self._start_reset_timer()
+
         if self.state.alarm_sounding():
             self.state.snooze_alarm()
             return
@@ -53,6 +90,9 @@ class MenuHandler: #keeping track of what is currently selected,
         self.render()
 
     def _backpressed(self):
+        if not self._current:
+            return
+
         if self.state.alarm_sounding():
             self.state.snooze_alarm()
             return
@@ -124,7 +164,7 @@ class Functionality_ChangeRGB(MenuItem):
     def render(self):
         message = "RGB: r={} g={} b={}".format(*self.state.led_color)
         self.display.oled.text(message, 0, 36)
-        print(message, end="")
+        print_debug(message, end="")
 
 
 class Functionality_ChangeTimeFormat(MenuItem):
@@ -144,7 +184,7 @@ class Functionality_ChangeTimeFormat(MenuItem):
         mstring = self.state.get_clock_mode_string()
         message = "Time format: {}".format(mstring)
         self.display.oled.text(message, 0, 36)
-        print(message, end="")
+        print_debug(message, end="")
 
 
 class Functionality_FrequencyChange(MenuItem):
@@ -173,7 +213,7 @@ class Functionality_FrequencyChange(MenuItem):
     def render(self):
         message = "Frequency: {:03.1f} ".format(self.state.radio_freq)
         self.display.oled.text(message, 0, 36)
-        print(message, end="")
+        print_debug(message, end="")
 
 
 class Functionality_AlarmTime(MenuItem):
@@ -202,7 +242,7 @@ class Functionality_AlarmTime(MenuItem):
         astring = self.state.get_alarm_string()
         message = "Alarm time: {}".format(astring)
         self.display.oled.text(message, 0, 36)
-        print(message, end="")
+        print_debug(message, end="")
 
 
 class Functionality_Toggle(MenuItem):
@@ -236,7 +276,7 @@ class Functionality_Toggle(MenuItem):
 
         message = "{} state: <{}>".format(self.name, sstring)
         self.display.oled.text(message, 0, 36)
-        print(message, end="")
+        print_debug(message, end="")
 
 
 class Functionality_Roller(MenuItem):
@@ -279,7 +319,7 @@ class Functionality_Roller(MenuItem):
 
         message = "{}: <{}>".format(self.name, vstring)
         self.display.oled.text(message, 0, 36)
-        print(message, end="")
+        print_debug(message, end="")
 
 
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
@@ -305,4 +345,17 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
 
     def render(self):
         self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
-        print("<{}>".format(self.children[self.index].name), end="")
+        print_debug("<{}>".format(self.children[self.index].name), end="")
+
+
+class Functionality_ClockDisplay(Functionality_MenuSelect):
+    def render(self):
+        tstring, dstring = self.state.get_clock_string()
+        self.display.oled.text(tstring, 0, 36)
+        print_debug(tstring, end="")
+
+    def ccw(self):
+        self.press()
+
+    def cw(self):
+        self.press()

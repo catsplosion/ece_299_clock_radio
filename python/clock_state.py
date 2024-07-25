@@ -206,7 +206,7 @@ class ClockState():
         self.alarm_time = time or self.alarm_time
         self.alarm_volume = volume or self.alarm_volume
         self.alarm_pattern = pattern or self.alarm_pattern
-        self.alarm_stime = snooze or self.alarm_stime
+        self.alarm_sdelay = snooze or self.alarm_sdelay
 
         self.alarm_time = (
             self.alarm_time[0] % 24,
@@ -215,12 +215,19 @@ class ClockState():
         )
 
         self.alarm_volume = max(min(15, self.alarm_volume), 1)
+        self.alarm_sdelay = max(min(self.alarm_sdelay, 60), 1)
 
     def set_alarm_volume(self, volume):
         self.set_alarm(volume=volume)
 
     def get_alarm_volume(self):
         return self.alarm_volume
+
+    def set_snooze_delay(self, snooze):
+        self.set_alarm(snooze=snooze)
+
+    def get_snooze_delay(self):
+        return self.alarm_sdelay
 
     def get_alarm_string(self):
         """
@@ -334,3 +341,13 @@ class ClockState():
             max(min(color[1], 255), 0),
             max(min(color[2], 255), 0)
         )
+
+    def enable_led(self):
+        """
+        """
+        pass
+
+    def disable_led(self):
+        """
+        """
+        pass

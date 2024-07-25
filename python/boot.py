@@ -7,19 +7,25 @@ from push_button import PushButton
 from rotary_encoder import RotaryEncoder
 
 
+encoder = RotaryEncoder(3, 4)
+accept_button = PushButton(5)
+back_button = PushButton(10)
+display = Oled(18, 19, 21, 20, 17)
+
 state = ClockState()
+menu_handler = menu.MenuHandler(encoder, accept_button, back_button, state, display)
 
 
 def update_handler(timer):
     state.update()
+    menu_handler.render()
 
 if __name__ == "__main__":
-    encoder = RotaryEncoder(3, 4)
-    accept_button = PushButton(5)
-    back_button = PushButton(10)
-    display = Oled(18, 19, 21, 20, 17)
+    clock_view = menu.Functionality_ClockDisplay(None, "display", state, display, menu_handler)
+    menu_handler.root = clock_view
+    menu_handler._current = clock_view
 
-    menu_handler = menu.MenuHandler(encoder, accept_button, back_button, state, display)
+    menu_root = menu.Functionality_MenuSelect(None, "root_node", state, display, menu_handler)
 
     alarm_time = menu.Functionality_AlarmTime(None, "Set Alarm", state, display, menu_handler)
     change_rgb = menu.Functionality_ChangeRGB(None, "Change RGB", state, display, menu_handler)
@@ -41,15 +47,25 @@ if __name__ == "__main__":
     alarm_volume = menu.Functionality_Roller(None, "Alarm Volume", state, display, menu_handler)
     alarm_volume.set_roller_fns(state.set_alarm_volume, state.get_alarm_volume, 1)
 
-    menu_handler.root.add_child(alarm_time)
-    menu_handler.root.add_child(change_rgb)
-    menu_handler.root.add_child(change_time_format)
-    menu_handler.root.add_child(frequency_change)
-    menu_handler.root.add_child(toggle_radio)
-    menu_handler.root.add_child(mute_radio)
-    menu_handler.root.add_child(toggle_alarm)
-    menu_handler.root.add_child(radio_volume)
-    menu_handler.root.add_child(alarm_volume)
+    led_toggle = menu.Functionality_Toggle(None, "Enable LEDs", state, display, menu_handler)
+    led_toggle.set_toggle_fns(state.enable_led, state.disable_led)
+
+    alarm_snooze = menu.Functionality_Roller(None, "Snooze Delay", state, display, menu_handler)
+    alarm_snooze.set_roller_fns(state.set_snooze_delay, state.get_snooze_delay)
+
+    clock_view.add_child(menu_root)
+
+    menu_root.add_child(alarm_time)
+    menu_root.add_child(change_rgb)
+    menu_root.add_child(change_time_format)
+    menu_root.add_child(frequency_change)
+    menu_root.add_child(toggle_radio)
+    menu_root.add_child(mute_radio)
+    menu_root.add_child(toggle_alarm)
+    menu_root.add_child(radio_volume)
+    menu_root.add_child(alarm_volume)
+    menu_root.add_child(led_toggle)
+    menu_root.add_child(alarm_snooze)
 
     menu_handler.render()
 
