@@ -80,17 +80,17 @@ for p in range (1500):
         
             average_magnitude += magnitudes[q] # Take the average mangitude and phase of that frequency band (each led represents a frequency band)
             average_phase += phases[q]
+            
+        c = 1 # scalar 
    
         average_magnitude = average_magnitude/num_cycles
-        average_phase = average_phase/num_cycles
+        average_phase = average_phase/num_cycles * c
     
         if(average_magnitude > 255): # Hmm. This is really only a case of when there is a DC component, for the first frequency band.
             average_magnitude = 255
-            
-        c = 0.1 # scalar 
 
-        linear_decrease = -(2/np.pi)*average_phase*c + 1
-        linear_increase = (1/np.pi)*average_phase*c
+        linear_decrease = -(2/np.pi)*average_phase + 1
+        linear_increase = (1/np.pi)*average_phase
 
         if average_phase >= -(np.pi / 2) and average_phase < 0:
             leds[n] = tuple(map(int, np.ceil((led_def[0], led_def[1], (led_def[2] + linear_decrease) * average_magnitude))))  # Decrease blue
