@@ -324,44 +324,6 @@ class Functionality_Roller(MenuItem):
 
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
     def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler) #function super() makes it so that it initalizes all the methods in MenuItem (goofy python moment)
-
-        self.index = 0
-
-    def ccw(self):
-        if(self.index < len(self.handler._current.children) -1):
-            self.index += 1
-        else:
-            self.index = 0
-
-    def cw(self):
-        if(self.index > 0):
-            self.index -= 1 #Reminder: self. refrences the attribute to that object, if it was just Index = then thats a local var
-        else:
-            self.index = (len(self.handler._current.children) - 1)
-
-    def press(self): ## _ thigns outside the class cant touch it __, no subclasses touching it
-        self.handler._current = self.children[self.index]
-
-    def render(self):
-        self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
-        print_debug("<{}>".format(self.children[self.index].name), end="")
-
-
-class Functionality_ClockDisplay(Functionality_MenuSelect):
-    def render(self):
-        tstring, dstring = self.state.get_clock_string()
-        self.display.oled.text(tstring, 0, 36)
-        print_debug(tstring, end="")
-
-    def ccw(self):
-        self.press()
-
-    def cw(self):
-        self.press()
-
-class Fucntionality_Lighting_Mode(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
         super().__init__(parent, name, state, display, handler) 
 
         self.index = 0
@@ -383,6 +345,38 @@ class Fucntionality_Lighting_Mode(MenuItem):
 
     def render(self):
         self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
+        print_debug("<{}>".format(self.children[self.index].name), end="")
+
+
+class Functionality_ClockDisplay(Functionality_MenuSelect):
+    def render(self):
+        tstring, dstring = self.state.get_clock_string()
+        self.display.oled.text(tstring, 0, 36)
+        print_debug(tstring, end="")
+
+    def ccw(self):
+        self.press()
+
+    def cw(self):
+        self.press()
+
+class Functionality_Change_Lighting(MenuItem):
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler) 
         
-#class Functionality_Change_RGB_Bool(MenuItem):
-    
+        self.state_values = self.state.led_states.values()
+        self.values_list = list(self.state_values)
+        
+    def press(self):
+        self.values_list[self.parent.index] = not self.values_list[self.parent.index]
+        self.state.led_states[self.name] = self.values_list[self.parent.index]
+        
+    def ccw(self):
+        self.press()
+
+    def cw(self):
+        self.press()
+
+    def render(self):
+        print(self.values_list[0])
+        self.display.oled.text('<' + str(self.values_list[self.parent.index]) + '>', 0, 36)

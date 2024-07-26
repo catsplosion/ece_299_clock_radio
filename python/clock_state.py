@@ -61,9 +61,9 @@ class ClockState():
         self.mute_radio()
         
         self.led_states = {
-            "Set_Colour" : False,
+            "Set Colour" : False,
             "FFT" : False,
-            "Off" : True
+            "Enabled" : False # On = True Off = False
         }
 
         self.led_color = (0, 0, 0)
@@ -357,3 +357,5 @@ class ClockState():
         """
         """
         pass
+
+
