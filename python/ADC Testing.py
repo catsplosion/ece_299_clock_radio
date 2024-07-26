@@ -13,13 +13,13 @@ ADC_pin = Pin(28)
 
 sampling_period = 48 #Sampling rate fixed at 0.5MHz (2*10^-6s max) - Recorded in microseconds
 
-num_leds = 16
+num_leds = 8
 
 num_cycles = 128 # Must be a power of 2
 
 # Definitions (Do not modify):
 
-leds = NeoPixel(Pin(0), num_leds)
+leds = NeoPixel(Pin(8), num_leds)
 
 analog_value = machine.ADC(ADC_pin)
 
@@ -39,7 +39,7 @@ average_phase = 0
 
 frequency_samples = np.empty(num_cycles)
 
-for p in range (1500):
+for p in range (180):
     for i in range (num_cycles):
         
         digital_value = analog_value.read_u16()     
@@ -83,14 +83,20 @@ for p in range (1500):
             
         c = 1 # scalar 
    
-        average_magnitude = average_magnitude/num_cycles
-        average_phase = average_phase/num_cycles * c
+        num_bins_per_led = num_cycles // num_leds
+        average_magnitude /= num_bins_per_led * c
+        average_phase /= num_bins_per_led
     
         if(average_magnitude > 255): # Hmm. This is really only a case of when there is a DC component, for the first frequency band.
             average_magnitude = 255
 
         linear_decrease = -(2/np.pi)*average_phase + 1
         linear_increase = (1/np.pi)*average_phase
+        
+        if(average_phase > np.pi):
+            average_phase = np.pi
+        elif(average_phase< -np.pi):
+            average_phase = -np.pi #Only here because of scaling
 
         if average_phase >= -(np.pi / 2) and average_phase < 0:
             leds[n] = tuple(map(int, np.ceil((led_def[0], led_def[1], (led_def[2] + linear_decrease) * average_magnitude))))  # Decrease blue
