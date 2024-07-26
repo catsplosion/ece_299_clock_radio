@@ -15,18 +15,24 @@ display = Oled(18, 19, 21, 20, 17)
 state = ClockState()
 menu_handler = menu.MenuHandler(encoder, accept_button, back_button, state, display)
 
-
 def update_handler(timer):
     state.update()
     menu_handler.render()
 
 if __name__ == "__main__":
     clock_view = menu.Functionality_ClockDisplay(None, "display", state, display, menu_handler)
+    
     menu_handler.root = clock_view
     menu_handler._current = clock_view
 
     menu_root = menu.Functionality_MenuSelect(None, "root_node", state, display, menu_handler)
-
+    
+    lighting_state = menu.Functionality_MenuSelect(None, "Lighting", state, display, menu_handler)
+    
+    FFT = menu.Functionality_Change_Lighting(None, "FFT", state, display, menu_handler)
+    cosntant = menu.Functionality_Change_Lighting(None, "Set Colour", state, display, menu_handler)
+    led_mode = menu.Functionality_Change_Lighting(None, "Enabled", state, display, menu_handler)
+        
     alarm_time = menu.Functionality_AlarmTime(None, "Set Alarm", state, display, menu_handler)
     change_rgb = menu.Functionality_ChangeRGB(None, "Change RGB", state, display, menu_handler)
     change_time_format = menu.Functionality_ChangeTimeFormat(None, "Change Format", state, display, menu_handler)
@@ -66,7 +72,13 @@ if __name__ == "__main__":
     menu_root.add_child(alarm_volume)
     menu_root.add_child(led_toggle)
     menu_root.add_child(alarm_snooze)
-
+        
+    menu_root.add_child(lighting_state)
+    
+    lighting_state.add_child(FFT)
+    lighting_state.add_child(cosntant)
+    lighting_state.add_child(led_mode)
+    
     menu_handler.render()
 
     update_timer = Timer(mode=Timer.PERIODIC, freq=1, callback=update_handler)

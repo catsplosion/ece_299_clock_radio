@@ -359,3 +359,30 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
 
     def cw(self):
         self.press()
+
+class Fucntionality_Lighting_Mode(MenuItem):
+    def __init__(self, parent, name, state, display, handler):
+        super().__init__(parent, name, state, display, handler) 
+
+        self.index = 0
+
+    def ccw(self):
+        if(self.index < len(self.handler._current.children) -1):
+            self.index += 1
+        else:
+            self.index = 0
+
+    def cw(self):
+        if(self.index > 0):
+            self.index -= 1 
+        else:
+            self.index = (len(self.handler._current.children) - 1)
+
+    def press(self): 
+        self.handler._current = self.children[self.index]
+
+    def render(self):
+        self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
+        
+#class Functionality_Change_RGB_Bool(MenuItem):
+    
