@@ -4,6 +4,7 @@ from machine import I2C
 from machine import PWM
 from machine import RTC
 from machine import Timer
+
 import rda5807
 
 
@@ -22,6 +23,21 @@ MONTHS = {
     12: "Dec"
 }
 
+MONTHDAYS = {
+    1: 31,
+    2: 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31
+}
+
 _ALARM_OFF = 0
 _ALARM_ON = 1
 _ALARM_SOUND = 2
@@ -31,12 +47,17 @@ _CLOCK_12HR = 0
 _CLOCK_24HR = 1
 
 
+def is_leap_year(year):
+    return not (year % 4 or year % 100 or year % 400)
+
+
 class ClockState():
 
     def __init__(self):
         self.rtc = RTC()
         self.rtc.datetime((2024, 1, 1, 0, 0, 0, 0, 0))
         self.clock_mode = _CLOCK_12HR
+        self.tz_offset = 0
 
         self.alarm_state = _ALARM_OFF
         self.alarm_time = (0, 0, 0)
@@ -130,6 +151,32 @@ class ClockState():
 
         self._pwm_lohi = not self._pwm_lohi
 
+    def datetimezoned(self):
+        year, month, day, _, hour, minute, sec, _ = self.rtc.datetime()
+
+        hour += self.tz_offset
+
+        if hour < 0:
+            day -= 1
+        elif hour >= 24:
+            day += 1
+
+        if day <= 0:
+            month -= 1
+        elif day > MONTHDAYS[month] + int(is_leap_year(year) and month == 2):
+            month += 1
+
+        if month <= 0:
+            year -= 1
+        elif month > 12:
+            year += 1
+
+        month = (month - 1) % 12 + 1
+        day = (day - 1) % MONTHDAYS[month] + int(is_leap_year(year) and month == 2) + 1
+        hour = hour % 24
+
+        return year, month, day, hour, minute, sec
+
     def set_time(self, time):
         """
         Set the current clock time. Hour is from 0 to 23.
@@ -174,6 +221,12 @@ class ClockState():
         mstring = "12hr" if self.clock_mode == _CLOCK_12HR else "24hr"
         return mstring
 
+    def get_tz_offset(self):
+        return self.tz_offset
+
+    def set_tz_offset(self, offset):
+        self.tz_offset = max(min(offset, 14), -12)
+
     def get_clock_string(self):
         """
         Return the clock values as a 2-tuple of strings.
@@ -181,17 +234,17 @@ class ClockState():
         Returns:
             (time, date)
         """
-        now = self.rtc.datetime()
+        year, month, day, hour, minute, sec = self.datetimezoned()
 
         tstring = "?:?:?"
         if self.clock_mode == _CLOCK_12HR:
-            hours = (now[4] - 1) % 12 + 1
-            mod = "am" if now[4] < 12 else "pm"
-            tstring = "{: 2d}:{:02d}:{:02d} {}".format(hours, *now[5:7], mod)
+            mod = "am" if hour < 11 else "pm"
+            hour = (hour - 1) % 12 + 1
+            tstring = "{: 2d}:{:02d}:{:02d} {}".format(hour, minute, sec, mod)
         elif self.clock_mode == _CLOCK_24HR:
-            tstring = "{:02d}:{:02d}:{:02d}".format(*now[4:7])
+            tstring = "{:02d}:{:02d}:{:02d}".format(hour, minute, sec)
 
-        dstring = "{} {}, {}".format(MONTHS[now[1]], now[2], now[0])
+        dstring = "{: 2d}/{:02d}/{:04d}".format(month, day, year)
 
         return tstring, dstring
 
@@ -236,15 +289,17 @@ class ClockState():
         Returns:
             (hour, min, sec)
         """
-        atime = self.alarm_time
+        hour, minute, sec = self.alarm_time
+
+        hour = (hour + self.tz_offset) % 12
 
         astring = "?:?:?"
         if self.clock_mode == _CLOCK_12HR:
-            hours = (atime[0] - 1) % 12 + 1
-            mod = "am" if atime[0] < 12 else "pm"
-            astring = "{: 2d}:{:02d}:{:02d} {}".format(hours, *atime[1:], mod)
+            hour = (hour - 1) % 12 + 1
+            mod = "am" if hour < 12 else "pm"
+            astring = "{: 2d}:{:02d}:{:02d} {}".format(hour, minute, sec, mod)
         elif self.clock_mode == _CLOCK_24HR:
-            astring = "{:02d}:{:02d}:{:02d}".format(*atime)
+            astring = "{:02d}:{:02d}:{:02d}".format(hour, minute, sec)
 
         return astring
 

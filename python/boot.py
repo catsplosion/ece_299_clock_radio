@@ -53,6 +53,9 @@ if __name__ == "__main__":
     alarm_snooze = menu.Functionality_Roller(None, "Snooze Delay", state, display, menu_handler)
     alarm_snooze.set_roller_fns(state.set_snooze_delay, state.get_snooze_delay)
 
+    zone_offset = menu.Functionality_Roller(None, "Time Zone", state, display, menu_handler)
+    zone_offset.set_roller_fns(state.set_tz_offset, state.get_tz_offset)
+
     clock_view.add_child(menu_root)
 
     menu_root.add_child(alarm_time)
@@ -66,6 +69,7 @@ if __name__ == "__main__":
     menu_root.add_child(alarm_volume)
     menu_root.add_child(led_toggle)
     menu_root.add_child(alarm_snooze)
+    menu_root.add_child(zone_offset)
 
     menu_handler.render()
 

@@ -285,14 +285,16 @@ class Functionality_Roller(MenuItem):
 
         self._value = None
         self._increment = 1
+        self._str_fn = None
 
         self._set_fn = None
         self._get_fn = None
 
-    def set_roller_fns(self, set_fn, get_fn, increment=1):
+    def set_roller_fns(self, set_fn, get_fn, increment=1, str_fn=None):
         self._set_fn = set_fn
         self._get_fn = get_fn
         self._increment = increment
+        self._str_fn = str_fn
 
         self._value = self._get_fn()
 
@@ -315,7 +317,7 @@ class Functionality_Roller(MenuItem):
     def render(self):
         vstring = "<unlinked>"
         if self._set_fn and self._get_fn:
-            vstring = self._get_fn()
+            vstring = self._str_fn() if self._str_fn else self._get_fn()
 
         message = "{}: <{}>".format(self.name, vstring)
         self.display.oled.text(message, 0, 36)
