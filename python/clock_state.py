@@ -7,6 +7,7 @@ from machine import Timer
 import rda5807
 
 
+
 MONTHS = {
     1: "Jan",
     2: "Feb",
@@ -63,10 +64,10 @@ class ClockState():
         self.led_states = {
             "Set Colour" : False,
             "FFT" : False,
-            "Enabled" : False # On = True Off = False
+            "OFF" : False # On = True Off = False
         }
 
-        self.led_color = (0, 0, 0)
+        self.led_color = [0, 0, 0]
 
     def update(self):
         """
@@ -357,5 +358,6 @@ class ClockState():
         """
         """
         pass
+
 
 

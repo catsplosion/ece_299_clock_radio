@@ -2,141 +2,170 @@ import utime
 
 from clock_state import ClockState
 from machine import Pin # REMINDER: DFT NOT DTFT!!!!
+from machine import ADC
 from neopixel import NeoPixel
 from ulab import numpy as np
+import _thread
 
 
-#Use controlled:
 
-save_data = True
-# skip_DC_component = True
+class LEDS():
 
-ADC_pin = Pin(28)
-
-sampling_period = 48 #Sampling rate fixed at 0.5MHz (2*10^-6s max) - Recorded in microseconds
-
-num_leds = 8
-
-num_cycles = 128 # Must be a power of 2
-
-# Definitions (Do not modify):
-
-leds = NeoPixel(Pin(8), num_leds)
-
-analog_value = machine.ADC(ADC_pin)
-
-ADC_y = np.empty(num_cycles)
-
-ADC_x = np.linspace(0, 3, num_cycles)
-
-FFT_y = np.empty(num_cycles)
-
-magnitudes = np.empty(num_cycles)
-
-phases = np.empty(num_cycles)
-
-average_magnitude = 0
-
-average_phase = 0
-
-frequency_samples = np.empty(num_cycles)
-
-def State_Changed()
-
-    while (ClockState.led_states["FFT"] == True):
+    def __init__(self, ADC_pin, GPIO_pin, num_leds, state, num_cycles = 128, sampling_period  = 48, save_data = False):
         
-        for i in range (num_cycles):
+        self.ADC_pin = ADC_pin #28
+        self.num_leds = num_leds
+        self.clock_state = state
+        self.save_data = save_data
+        self.sampling_period = sampling_period #Sampling rate fixed at 0.5MHz (2*10^-6s max) - Recorded in microseconds (48)
+    
+        self.num_cycles = num_cycles # Must be a power of 2
+        self.__save_data = save_data
+        # self.skip_DC_component = True
+        self.ADC_pin = Pin(ADC_pin)
+        self.GPIO_pin = GPIO_pin # 8
+
+        # Definitions (Do not modify):
+
+        self.npleds = NeoPixel(Pin(self.GPIO_pin), self.num_leds)
+        self.analog_value = ADC(self.ADC_pin)
+        self.ADC_y = np.empty(self.num_cycles)
+        self.ADC_x = np.linspace(0, 3, self.num_cycles)
+        self.FFT_y = np.empty(self.num_cycles)
+        self.magnitudes = np.empty(self.num_cycles)
+        self.phases = np.empty(self.num_cycles)
+        self.average_magnitude = 0
+        self.average_phase = 0
+        self.frequency_samples = np.empty(self.num_cycles)
+        
+    
+    
+    def Constant(self, Off=False):
+        
+        for n in range(self.num_leds):
+            if not Off:
+                self.npleds[n] =  (self.clock_state.led_color[0], self.clock_state.led_color[1], self.clock_state.led_color[2])
+            else:
+                self.npleds[n] =  (0, 0, 0)
             
-            digital_value = analog_value.read_u16()     
-            print("ADC: ", digital_value)
+        self.npleds.write()
             
-            ADC_y[i] = (digital_value)        
-            utime.sleep_us(sampling_period) 
+    def FFT_State(self): #Handles all logic
 
-        real, imaginary = np.fft.fft(ADC_y)
-          
-        frequency_resolution = (1/(sampling_period*(10**-6))/(num_cycles))
-
-        for k in range(num_cycles):
-        
-            magnitudes[k] = (np.sqrt((real[k]**2) + (imaginary[k]**2)))
-        
-            phases[k] = (np.arctan2(imaginary[k], real[k]))
-        
-            frequency_samples[k] = ((k)*frequency_resolution)
-        
-        #Bin 1: 1* numcycles/numleds
-        #bin 16 (max num of leds): numleds * numcycles/numleds
-
-        counter = 0
-
-        led_def = np.array([0,1,1]) #Default led state, when phase = 0
-
-        for n in range (num_leds):
-        
-            prev_counter = counter
-            counter = n * num_cycles/num_leds
-        
-            for q in range (prev_counter, counter): # Divide the frequencies into sections/a bamd
+        #while (True): #self.clock_state.led_states["FFT"]
+        for i in range (1000):
+           
+            if(self.clock_state.radio_muted != False and self.clock_state.radio_enabled != True): #Due to noise, even if the radio is off, the ADC still reads values
+                self.Constant(True) # Turn off the leds
+                break
             
-                q = int(q) # for some reason iterating between two numbers makes the iterator a float
-            
-                average_magnitude += magnitudes[q] # Take the average mangitude and phase of that frequency band (each led represents a frequency band)
-                average_phase += phases[q]
+            for i in range (self.num_cycles):
                 
-            c = 1 # scalar 
-       
-            num_bins_per_led = num_cycles // num_leds
-            average_magnitude /= num_bins_per_led * c
-            average_phase /= num_bins_per_led
-        
-            if(average_magnitude > 255): # Hmm. This is really only a case of when there is a DC component, for the first frequency band.
-                average_magnitude = 255
+                self.digital_value = self.analog_value.read_u16()     
+                print("ADC: ", self.digital_value)
+                
+                self.ADC_y[i] = (self.digital_value)        
+                utime.sleep_us(self.sampling_period) 
 
-            linear_decrease = -(2/np.pi)*average_phase + 1
-            linear_increase = (1/np.pi)*average_phase
-            
-            if(average_phase > np.pi):
-                average_phase = np.pi
-            elif(average_phase< -np.pi):
-                average_phase = -np.pi #Only here because of scaling
+            self.real, self.imaginary = np.fft.fft(self.ADC_y)
+              
+            self.frequency_resolution = (1/(self.sampling_period*(10**-6))/(self.num_cycles))
 
-            if average_phase >= -(np.pi / 2) and average_phase < 0:
-                leds[n] = tuple(map(int, np.ceil((led_def[0], led_def[1], (led_def[2] + linear_decrease) * average_magnitude))))  # Decrease blue
+            for k in range(self.num_cycles):
             
-            elif average_phase >= -np.pi and average_phase < -(np.pi / 2):
-                leds[n] = tuple(map(int, np.ceil(((led_def[0] + linear_increase) * average_magnitude, led_def[1], led_def[2]))))  # Increase red
+                self.magnitudes[k] = (np.sqrt((self.real[k]**2) + (self.imaginary[k]**2)))
             
-            elif average_phase >= 0 and average_phase < (np.pi / 2):
-                leds[n] = tuple(map(int, np.ceil((led_def[0], (led_def[1] + linear_decrease) * average_magnitude, led_def[2]))))  # Decrease green
+                self.phases[k] = (np.arctan2(self.imaginary[k], self.real[k]))
             
-            elif average_phase >= (np.pi / 2) and average_phase < np.pi:
-                leds[n] = tuple(map(int, np.ceil(((led_def[0] + linear_increase) * average_magnitude, led_def[1], led_def[2]))))  # Increase red
+                self.frequency_samples[k] = ((k)*self.frequency_resolution)
             
-            print(leds[n][0], leds[n][1], leds[n][2])
-            leds.write()
+            #Bin 1: 1* numcycles/numleds
+            #Bin 16 (max num of leds): numleds * numcycles/numleds
+
+            self.counter = 0
+
+            self.led_def = np.array([0,1,1]) #Default led state, when phase = 0
+
+            for n in range (self.num_leds):
+                
+                start_time = utime.ticks_ms()
             
-        
-    if save_data:
-        try:
-            f = open("ADC_DATA.txt", "wt")
+                self.prev_counter = self.counter
+                self.counter = n * self.num_cycles/self.num_leds
             
-            f.write("Original ADC values:\n")
-            f.write(', '.join(map(str, ADC_y)) + '\n')
-        
-            f.write("X values:\n")
-            f.write(', '.join(map(str, ADC_x)) + '\n')
-        
-            f.write("FFT Magnitudes:\n")
-            f.write(', '.join(map(str, magnitudes)) + '\n')
+                for q in range (self.prev_counter, self.counter): # Divide the frequencies into sections/a band
+                
+                    self.q = int(q) # for some reason iterating between two numbers makes the iterator a float
+                
+                    self.average_magnitude += self.magnitudes[self.q] # Take the average mangitude and phase of that frequency band (each led represents a frequency band)
+                    self.average_phase += self.phases[self.q]
                     
-            f.write("FFT Phases:\n")
-            f.write(', '.join(map(str, phases)) + '\n')
-        
-            f.write("Frequencies:\n")
-            f.write(', '.join(map(str, frequency_samples)) + '\n')
-
-            f.close()
+                self.c = 1 # scalar 
+           
+                self.num_bins_per_led = self.num_cycles // self.num_leds
+                self.average_magnitude /= self.num_bins_per_led * self.c
+                self.average_phase /= self.num_bins_per_led
             
-        except Exception as e:
-            raise RuntimeError("Could not write to file,", e)    
+                if(self.average_magnitude > 255): # Hmm. This is really only a case of when there is a DC component, for the first frequency band.
+                    self.average_magnitude = 255
+
+                self.linear_decrease = -(2/np.pi)*self.average_phase + 1
+                self.linear_increase = (1/np.pi)*self.average_phase
+                
+                if(self.average_phase > np.pi):
+                    self.average_phase = np.pi
+                elif(self.average_phase< -np.pi):
+                    self.average_phase = -np.pi #Only here because of scaling
+
+                if self.average_phase >= -(np.pi / 2) and self.average_phase < 0:
+                    self.npleds[n] = tuple(map(int, np.ceil((self.led_def[0], self.led_def[1], (self.led_def[2] + self.linear_decrease) * self.average_magnitude))))  # Decrease blue
+                
+                elif self.average_phase >= -np.pi and self.average_phase < -(np.pi / 2):
+                    self.npleds[n] = tuple(map(int, np.ceil(((self.led_def[0] + self.linear_increase) * self.average_magnitude, self.led_def[1], self.led_def[2]))))  # Increase red
+                
+                elif self.average_phase >= 0 and self.average_phase < (np.pi / 2):
+                    self.npleds[n] = tuple(map(int, np.ceil((self.led_def[0], (self.led_def[1] + self.linear_decrease) * self.average_magnitude, self.led_def[2]))))  # Decrease green
+                
+                elif self.average_phase >= (np.pi / 2) and self.average_phase < np.pi:
+                    self.npleds[n] = tuple(map(int, np.ceil(((self.led_def[0] + self.linear_increase) * self.average_magnitude, self.led_def[1], self.led_def[2]))))  # Increase red
+                
+                print(self.npleds[n][0], self.npleds[n][1], self.npleds[n][2])
+                self.npleds.write()
+            
+            elapsed_time = utime.ticks_diff(utime.ticks_ms(), start_time)
+            if elapsed_time > 100:
+                utime.sleep_ms(1)  # Yield control to allow interrupts
+                
+            
+        if self.__save_data:
+            try:
+                self.f = open("ADC_DATA.txt", "wt")
+                
+                self.f.write("Original ADC values:\n")
+                self.f.write(', '.join(map(str, self.ADC_y)) + '\n')
+            
+                self.f.write("X values:\n")
+                self.f.write(', '.join(map(str, self.ADC_x)) + '\n')
+            
+                self.f.write("FFT Magnitudes:\n")
+                self.f.write(', '.join(map(str, self.magnitudes)) + '\n')
+                        
+                self.f.write("FFT Phases:\n")
+                self.f.write(', '.join(map(str, self.phases)) + '\n')
+            
+                self.f.write("Frequencies:\n")
+                self.f.write(', '.join(map(str, self.frequency_samples)) + '\n')
+
+                self.f.close()
+                
+            except Exception as e:
+                self.f.close() # Just in case...
+                raise RuntimeError("Could not write to file,", e)
+    
+    
+    def start_FFT_thread(self):
+        self.running = True
+        _thread.start_new_thread(self.FFT_State, ())
+
+    def stop_FFT_thread(self):
+        self.running = False

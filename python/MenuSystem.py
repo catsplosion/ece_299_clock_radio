@@ -10,7 +10,7 @@ def print_debug(*args, **kwds):
 
 
 class MenuHandler: #keeping track of what is currently selected,
-    def __init__(self, encoder, accept_button, back_button, state, display):
+    def __init__(self, encoder, accept_button, back_button, state, display, leds):
         self.state = state
         self.display = display
         self.root = None #This creates an attribute local to the instance. Self is automatically passed?
@@ -101,12 +101,13 @@ class MenuHandler: #keeping track of what is currently selected,
         self.render()
 
 class MenuItem:
-    def __init__(self, parent, name, state, display, handler=None):
+    def __init__(self, parent, name, state, display, leds, handler=None):
         self.parent = parent #Attributes
         self.name = name
         self.handler = handler
         self.state = state
         self.display = display
+        self.leds = leds
 
         if handler is None:
             self.handler = parent.handler
@@ -137,10 +138,10 @@ class MenuItem:
 
 
 class Functionality_ChangeRGB(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler)
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
 
-        self.selections = ['r', 'g', 'b']
+        #self.selections = ['r', 'g', 'b']
         self.index = 0
 
     def ccw(self):
@@ -168,8 +169,8 @@ class Functionality_ChangeRGB(MenuItem):
 
 
 class Functionality_ChangeTimeFormat(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler)
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
 
     def ccw(self):
         self.state.set_clock_mode("12hr")
@@ -189,8 +190,8 @@ class Functionality_ChangeTimeFormat(MenuItem):
 
 class Functionality_FrequencyChange(MenuItem):
 
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler)
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
 
         self.selections = [1, 0.2]
         self.index = 0
@@ -217,8 +218,8 @@ class Functionality_FrequencyChange(MenuItem):
 
 
 class Functionality_AlarmTime(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler)
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
 
         self.selections = ["hour", "minute"]
         self.index = 0
@@ -246,8 +247,8 @@ class Functionality_AlarmTime(MenuItem):
 
 
 class Functionality_Toggle(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler)
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
 
         self._enabled = False
         self._enable_fn = None
@@ -280,8 +281,8 @@ class Functionality_Toggle(MenuItem):
 
 
 class Functionality_Roller(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler)
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
 
         self._value = None
         self._increment = 1
@@ -323,8 +324,8 @@ class Functionality_Roller(MenuItem):
 
 
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler) 
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler) 
 
         self.index = 0
 
@@ -361,8 +362,8 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
         self.press()
 
 class Functionality_Change_Lighting(MenuItem):
-    def __init__(self, parent, name, state, display, handler):
-        super().__init__(parent, name, state, display, handler) 
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler) 
                 
     def press(self):
         
@@ -370,7 +371,19 @@ class Functionality_Change_Lighting(MenuItem):
             if item != self.name:
                 self.state.led_states[item] = False
             else:
-                self.state.led_states[item] = True
+                self.state.led_states[item] = not self.state.led_states[item]
+                
+        
+        if self.state.led_states["OFF"]:
+            self.leds.Constant(True)
+        else:
+            self.leds.Constant(False)
+        if self.state.led_states["Set Colour"]:
+            self.leds.Constant(False)
+        else:
+            self.leds.Constant(True)
+        if self.state.led_states["FFT"]:
+            self.leds.start_FFT_thread()
             
     def ccw(self):
         self.press()
@@ -379,5 +392,6 @@ class Functionality_Change_Lighting(MenuItem):
         self.press()
 
     def render(self):
-        print(self.values_list[0])
-        self.display.oled.text('<' + str(self.values_list[self.parent.index]) + '>', 0, 36)
+        #print(self.values_list[0])
+        self.display.oled.text('<' + str(self.state.led_states[self.name]) + '>', 0, 36)
+
