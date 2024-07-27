@@ -363,14 +363,15 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
 class Functionality_Change_Lighting(MenuItem):
     def __init__(self, parent, name, state, display, handler):
         super().__init__(parent, name, state, display, handler) 
-        
-        self.state_values = self.state.led_states.values()
-        self.values_list = list(self.state_values)
-        
+                
     def press(self):
-        self.values_list[self.parent.index] = not self.values_list[self.parent.index]
-        self.state.led_states[self.name] = self.values_list[self.parent.index]
         
+        for item in self.state.led_states:
+            if item != self.name:
+                self.state.led_states[item] = False
+            else:
+                self.state.led_states[item] = True
+            
     def ccw(self):
         self.press()
 
