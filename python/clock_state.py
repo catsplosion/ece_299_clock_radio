@@ -240,11 +240,11 @@ class ClockState():
         if self.clock_mode == _CLOCK_12HR:
             mod = "am" if hour < 11 else "pm"
             hour = (hour - 1) % 12 + 1
-            tstring = "{: 2d}:{:02d}:{:02d} {}".format(hour, minute, sec, mod)
+            tstring = "{:2d}:{:02d}:{:02d} {}".format(hour, minute, sec, mod)
         elif self.clock_mode == _CLOCK_24HR:
             tstring = "{:02d}:{:02d}:{:02d}".format(hour, minute, sec)
 
-        dstring = "{: 2d}/{:02d}/{:04d}".format(month, day, year)
+        dstring = "{:2d}/{:02d}/{:04d}".format(month, day, year)
 
         return tstring, dstring
 

@@ -387,7 +387,14 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
 class Functionality_ClockDisplay(Functionality_MenuSelect):
     def render(self):
         tstring, dstring = self.state.get_clock_string()
-        self.display.oled.text(tstring, 0, 36)
+        self.display.oled.text(dstring, 48, 0)
+
+        for k, char in enumerate(tstring):
+            if "0" <= char and char <= "9":
+                self.display.tall_digit(ord(char) - ord("0"), 8+10*k, 24)
+            else:
+                self.display.oled.text(char, 8+10*k, 31)
+
         print_debug(tstring, end="")
 
     def ccw(self):
