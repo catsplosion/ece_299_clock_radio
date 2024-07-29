@@ -387,6 +387,7 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
 class Functionality_ClockDisplay(Functionality_MenuSelect):
     def render(self):
         tstring, dstring = self.state.get_clock_string()
+        self.display.oled.text(self.state.get_temp_string(), 0, 0)
         self.display.oled.text(dstring, 48, 0)
 
         for k, char in enumerate(tstring):

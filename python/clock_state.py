@@ -1,5 +1,6 @@
 import time
 
+from machine import ADC
 from machine import I2C
 from machine import PWM
 from machine import RTC
@@ -82,6 +83,12 @@ class ClockState():
         self.mute_radio()
 
         self.led_color = (0, 0, 0)
+
+        self.temp_adc = ADC(ADC.CORE_TEMP)
+        self.temp_timer = Timer(mode=Timer.PERIODIC, period=10000, callback=self._poll_temp)
+        self.temp = 99
+
+        self._poll_temp(self.temp_timer)
 
     def update(self):
         """
@@ -406,3 +413,10 @@ class ClockState():
         """
         """
         pass
+
+    def _poll_temp(self, timer):
+        temp = self.temp_adc.read_u16()
+        self.temp = 27 - (temp * 3.3 / 65535 - 0.706) / 0.001721
+
+    def get_temp_string(self):
+        return "{:2d}C".format(max(min(int(self.temp), 99), -9))
