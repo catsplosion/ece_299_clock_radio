@@ -25,9 +25,12 @@ if __name__ == "__main__":
     menu_handler.root = clock_view
     menu_handler._current = clock_view
 
-    menu_root = menu.Functionality_MenuSelect(None, "root_node", state, display, menu_handler)
+    menu_root = menu.Functionality_MenuSelect(None, "Settings", state, display, menu_handler)
+    menu_alarm = menu.Functionality_MenuSelect(None, "Alarm Settings", state, display, menu_handler)
+    menu_time = menu.Functionality_MenuSelect(None, "Time Settings", state, display, menu_handler)
+    menu_radio = menu.Functionality_MenuSelect(None, "Radio Settings", state, display, menu_handler)
 
-    alarm_time = menu.Functionality_AlarmTime(None, "Set Alarm", state, display, menu_handler)
+    alarm_time = menu.Functionality_AlarmTime(None, "Alarm Time", state, display, menu_handler)
     change_rgb = menu.Functionality_ChangeRGB(None, "Change RGB", state, display, menu_handler)
     change_time_format = menu.Functionality_ChangeTimeFormat(None, "Change Format", state, display, menu_handler)
     frequency_change = menu.Functionality_FrequencyChange(None, "Change Freq.", state, display, menu_handler)
@@ -58,18 +61,24 @@ if __name__ == "__main__":
 
     clock_view.add_child(menu_root)
 
-    menu_root.add_child(alarm_time)
+    menu_root.add_child(menu_alarm)
+    menu_alarm.add_child(alarm_time)
+    menu_alarm.add_child(toggle_alarm)
+    menu_alarm.add_child(alarm_volume)
+    menu_alarm.add_child(alarm_snooze)
+
+    menu_root.add_child(menu_time)
+    menu_time.add_child(change_time_format)
+    menu_time.add_child(zone_offset)
+
+    menu_root.add_child(menu_radio)
+    menu_radio.add_child(toggle_radio)
+    menu_radio.add_child(frequency_change)
+    menu_radio.add_child(radio_volume)
+    menu_radio.add_child(mute_radio)
+
     menu_root.add_child(change_rgb)
-    menu_root.add_child(change_time_format)
-    menu_root.add_child(frequency_change)
-    menu_root.add_child(toggle_radio)
-    menu_root.add_child(mute_radio)
-    menu_root.add_child(toggle_alarm)
-    menu_root.add_child(radio_volume)
-    menu_root.add_child(alarm_volume)
     menu_root.add_child(led_toggle)
-    menu_root.add_child(alarm_snooze)
-    menu_root.add_child(zone_offset)
 
     menu_handler.render()
 

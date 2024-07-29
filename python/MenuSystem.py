@@ -41,11 +41,14 @@ class MenuHandler: #keeping track of what is currently selected,
         if not self._current:
             return
 
-        #draw square or something (constant)
         self.display.oled.fill(0)
-        self.display.oled.rect(0, 0, 128, 20, 1)
-        self.display.oled.text("Swag Swag Swag", 8, 6)
-        print_debug("Swag Swag Swag: ", end="")
+
+        if self._current != self.root:
+            #draw square or something (constant)
+            self.display.oled.rect(0, 0, 128, 20, 1)
+            self.display.oled.text(self._current.name, 4, 6, 2)
+            print_debug(self._current.name + " ", end="")
+
         self._current.render()
         self.display.oled.show()
         print_debug("")
@@ -162,8 +165,16 @@ class Functionality_ChangeRGB(MenuItem):
             self.index += 1
 
     def render(self):
+        self.display.oled.text("RGB:", 0, 36)
+
+        for i, channel in enumerate(("r", "g", "b")):
+            if self.index == i:
+                self.display.oled.rect(43*i, 45, 32, 10, 1, True)
+
+            value = self.state.led_color[i]
+            self.display.oled.text("{}={}".format(channel, value), 43*i, 46, self.index != i)
+
         message = "RGB: r={} g={} b={}".format(*self.state.led_color)
-        self.display.oled.text(message, 0, 36)
         print_debug(message, end="")
 
 
@@ -182,8 +193,10 @@ class Functionality_ChangeTimeFormat(MenuItem):
 
     def render(self):
         mstring = self.state.get_clock_mode_string()
+        self.display.oled.text("Time format:", 0, 36)
+        self.display.oled.text(mstring, 30, 46)
+
         message = "Time format: {}".format(mstring)
-        self.display.oled.text(message, 0, 36)
         print_debug(message, end="")
 
 
@@ -211,8 +224,10 @@ class Functionality_FrequencyChange(MenuItem):
         self.index = 0 if self.index else 1
 
     def render(self):
+        self.display.oled.text("Frequency:", 0, 36)
+        self.display.oled.text("{:03.1f}".format(self.state.radio_freq), 30, 46)
+
         message = "Frequency: {:03.1f} ".format(self.state.radio_freq)
-        self.display.oled.text(message, 0, 36)
         print_debug(message, end="")
 
 
@@ -240,8 +255,11 @@ class Functionality_AlarmTime(MenuItem):
 
     def render(self):
         astring = self.state.get_alarm_string()
+
+        self.display.oled.text("Alarm time:", 0, 36)
+        self.display.oled.text(astring, 30, 46)
+
         message = "Alarm time: {}".format(astring)
-        self.display.oled.text(message, 0, 36)
         print_debug(message, end="")
 
 
@@ -274,8 +292,10 @@ class Functionality_Toggle(MenuItem):
         if self._disable_fn or self._enable_fn:
             sstring = "on" if self._enabled else "off"
 
+        self.display.oled.text("State:", 0, 36)
+        self.display.oled.text(sstring, 30, 46)
+
         message = "{} state: <{}>".format(self.name, sstring)
-        self.display.oled.text(message, 0, 36)
         print_debug(message, end="")
 
 
@@ -317,10 +337,12 @@ class Functionality_Roller(MenuItem):
     def render(self):
         vstring = "<unlinked>"
         if self._set_fn and self._get_fn:
-            vstring = self._str_fn() if self._str_fn else self._get_fn()
+            vstring = str(self._str_fn() if self._str_fn else self._get_fn())
+
+        self.display.oled.text("Value:", 0, 36)
+        self.display.oled.text(vstring, 30, 46)
 
         message = "{}: <{}>".format(self.name, vstring)
-        self.display.oled.text(message, 0, 36)
         print_debug(message, end="")
 
 
@@ -330,13 +352,13 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
 
         self.index = 0
 
-    def ccw(self):
+    def cw(self):
         if(self.index < len(self.handler._current.children) -1):
             self.index += 1
         else:
             self.index = 0
 
-    def cw(self):
+    def ccw(self):
         if(self.index > 0):
             self.index -= 1 #Reminder: self. refrences the attribute to that object, if it was just Index = then thats a local var
         else:
@@ -346,7 +368,19 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
         self.handler._current = self.children[self.index]
 
     def render(self):
-        self.display.oled.text('<' + self.children[self.index].name + '>', 0, 36)
+        start = max(min(self.index + 4, len(self.children)) - 4, 0)
+        end = min(self.index + 4, len(self.children))
+
+        for k in range(start, end):
+            line = "{}) {}".format(k+1, self.children[k].name)
+            if len(line) > 16:
+                line = line[:14] + ".."
+
+            if k == self.index:
+                self.display.oled.rect(0, 23 + 10*(k-start), 128, 9, 1, True)
+
+            self.display.oled.text(line, 0, 24 + 10*(k-start), int(k != self.index))
+
         print_debug("<{}>".format(self.children[self.index].name), end="")
 
 
