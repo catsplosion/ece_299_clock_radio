@@ -1,4 +1,5 @@
 from machine import Pin
+from machine import Timer
 
 
 _START = 0
@@ -46,6 +47,8 @@ class RotaryEncoder(object):
         self._ccw_fn = None
         self._ccw_fn_args = []
 
+        self._timeout_timer = Timer()
+
     def __del__(self):
         self._pin_clk.irq(None)
         self._pin_dir.irq(None)
@@ -56,12 +59,23 @@ class RotaryEncoder(object):
         if self._pull is not Pin.PULL_UP:
             index = 3 - index
 
+        self._pin_clk.irq()
+        self._pin_dir.irq()
+        self._timeout_timer.init(
+            mode=Timer.ONE_SHOT,
+            period=500, callback=self._timeout_handler
+        )
+
         if self._state == _CW3 and index == 3:
             self._call_cw_fn()
         elif self._state == _CCW3 and index == 3:
             self._call_ccw_fn()
 
         self._state = _TTABLE[self._state][index]
+
+    def _timeout_handler(self, timer):
+        self._pin_clk.irq(self._irq_handler, Pin.IRQ_FALLING | Pin.IRQ_RISING)
+        self._pin_dir.irq(self._irq_handler, Pin.IRQ_FALLING | Pin.IRQ_RISING)
 
     def _call_cw_fn(self):
         if self._cw_fn:
@@ -93,4 +107,3 @@ class RotaryEncoder(object):
         """
         self._ccw_fn = fn
         self._ccw_fn_args = args
-
