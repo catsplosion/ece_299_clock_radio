@@ -30,7 +30,7 @@ if __name__ == "__main__":
     
     menu_handler.root = clock_view
     menu_handler._current = clock_view
-
+    
     menu_root = menu.Functionality_MenuSelect(None, "root_node", state, display, leds, menu_handler)
     
     lighting_state = menu.Functionality_MenuSelect(None, "Lighting", state, display, leds, menu_handler)
@@ -88,3 +88,7 @@ if __name__ == "__main__":
     menu_handler.render()
 
     update_timer = Timer(mode=Timer.PERIODIC, freq=1, callback=update_handler)
+    
+    leds.FFT_State()
+
+        

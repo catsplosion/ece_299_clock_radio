@@ -22,6 +22,7 @@ class MenuHandler: #keeping track of what is currently selected,
         back_button.set_press_fn(self._backpressed)
 
         self._reset_timer = Timer()
+        
 
     def __del__(self):
         pass
@@ -108,7 +109,7 @@ class MenuItem:
         self.state = state
         self.display = display
         self.leds = leds
-
+        
         if handler is None:
             self.handler = parent.handler
 
@@ -372,18 +373,6 @@ class Functionality_Change_Lighting(MenuItem):
                 self.state.led_states[item] = False
             else:
                 self.state.led_states[item] = not self.state.led_states[item]
-                
-        
-        if self.state.led_states["OFF"]:
-            self.leds.Constant(True)
-        else:
-            self.leds.Constant(False)
-        if self.state.led_states["Set Colour"]:
-            self.leds.Constant(False)
-        else:
-            self.leds.Constant(True)
-        if self.state.led_states["FFT"]:
-            self.leds.start_FFT_thread()
             
     def ccw(self):
         self.press()
@@ -394,4 +383,3 @@ class Functionality_Change_Lighting(MenuItem):
     def render(self):
         #print(self.values_list[0])
         self.display.oled.text('<' + str(self.state.led_states[self.name]) + '>', 0, 36)
-
