@@ -251,7 +251,7 @@ class ClockState():
         elif self.clock_mode == _CLOCK_24HR:
             tstring = "{:02d}:{:02d}:{:02d}".format(hour, minute, sec)
 
-        dstring = "{:2d}/{:02d}/{:04d}".format(month, day, year)
+        dstring = "{}/{:02d}/{:04d}".format(MONTHS[month], day, year)
 
         return tstring, dstring
 
