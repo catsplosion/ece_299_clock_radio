@@ -9,6 +9,7 @@ from machine import Timer
 import rda5807
 
 
+
 MONTHS = {
     1: "Jan",
     2: "Feb",
@@ -81,8 +82,14 @@ class ClockState():
         self.radio_volume = 2
 
         self.mute_radio()
+        
+        self.led_states = {
+            "Set Colour" : False,
+            "FFT" : False,
+            "OFF" : False # On = True Off = False
+        }
 
-        self.led_color = (0, 0, 0)
+        self.led_color = [0, 0, 0]
 
         self.temp_adc = ADC(ADC.CORE_TEMP)
         self.temp_timer = Timer(mode=Timer.PERIODIC, period=10000, callback=self._poll_temp)
