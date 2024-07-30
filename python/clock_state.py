@@ -25,6 +25,7 @@ MONTHS = {
     12: "Dec"
 }
 
+
 MONTHDAYS = {
     1: 31,
     2: 28,
@@ -80,8 +81,20 @@ class ClockState():
         self.radio_muted = True
         self.radio_freq = 100.3
         self.radio_volume = 2
-
+        
         self.mute_radio()
+        
+        self.stations = {
+            98.5 : "CIOC",
+            100.3 : "CKKQ",
+            91.3 : "CJZN",
+            103.1 : "CHTT",
+            107.3 : "CHBE",
+            90.5 : "CBCV",
+            107.9 : "CILS",
+            1070 : "CFAX",
+            101.9 : "CFUV"
+        }
         
         self.led_states = {
             "Set Colour" : False,

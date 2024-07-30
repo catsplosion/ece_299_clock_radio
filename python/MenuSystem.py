@@ -391,7 +391,24 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
         tstring, dstring = self.state.get_clock_string()
         self.display.oled.text(self.state.get_temp_string(), 0, 0)
         self.display.oled.text(dstring, 40, 0)
+        
+        self.channel_name = None
+        
+        self.display.oled.text("UTC" + self.state.tz_offset, 60, 0)
+        
+        if(self.state.alarm_state = 0):
+            self.display.oled.text("No Alarm set", 80 , 0)
+        else:
+            self.display.oled.text("Alarm set for: " + self.state.alarm_time[0] + ":" + self.state.alarm_time[1] + ":" + self.state.alarm_time[2], 80 ,0)
 
+        try:
+            self.channel_name = self.state.stations[self.state.radio_freq]
+            self.display.oled.text(str(self.channel_name) 90, 0)
+        except(KeyError):
+            self.display.oled.text("No info" 90, 0)
+
+
+            
         for k, char in enumerate(tstring):
             if "0" <= char and char <= "9":
                 self.display.tall_digit(ord(char) - ord("0"), 8+10*k, 24)
