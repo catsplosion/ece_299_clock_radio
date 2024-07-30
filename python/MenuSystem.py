@@ -244,26 +244,27 @@ class Functionality_AlarmTime(MenuItem):
     def __init__(self, parent, name, state, display, leds, handler):
         super().__init__(parent, name, state, display, leds, handler)
 
-        self.selections = ["hour", "minute"]
+        self.selections = ["hour", "minute", "second"]
         self.index = 0
 
     def ccw(self):
         alarm_time = list(self.state.alarm_time)
-        alarm_time[self.index + 1] -= 1
+        alarm_time[self.index] -= 1
 
         self.state.set_alarm(time=alarm_time)
 
     def cw(self):
         alarm_time = list(self.state.alarm_time)
-        alarm_time[self.index + 1] += 1
+        alarm_time[self.index] += 1
 
         self.state.set_alarm(time=alarm_time)
 
     def press(self):
-        self.index = 0 if self.index else 1
+        self.index = (self.index + 1) % 3
 
     def render(self):
         astring = self.state.get_alarm_string()
+        parts = astring.split(":")
 
         self.display.oled.text("Alarm time:", 0, 36)
         self.display.oled.text(astring, 30, 46)
@@ -445,7 +446,7 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
         self.display.oled.text(dstring, 40, 0)
 
         if self.state.tz_offset:
-            self.display.oled.text("TZ{:+d}".format(self.state.tz_offset), 72, 9)
+            self.display.oled.text("UTC{:+d}".format(self.state.tz_offset), 64, 9)
 
         if self.state.alarm_enabled:
             self.display.bell(120, 9)

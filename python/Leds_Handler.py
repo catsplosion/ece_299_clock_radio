@@ -57,13 +57,11 @@ class LEDS():
             
             if(self.clock_state.radio_muted != False or self.clock_state.radio_enabled != True or self.clock_state.led_states["FFT"] != True): #Due to noise, even if the radio is off, the ADC still reads values
                 
-                if(self.clock_state.led_states["Set Colour"] and not state_changed):
-                    state_changed = True
+                if(self.clock_state.led_states["Set Colour"]):
                     self.Constant(False)
                     
                 else:
                     self.Constant(True) # Assume "OFF" State
-                    state_changed = False
                 
             
 

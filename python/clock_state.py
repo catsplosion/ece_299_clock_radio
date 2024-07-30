@@ -321,12 +321,12 @@ class ClockState():
         """
         hour, minute, sec = self.alarm_time
 
-        hour = (hour + self.tz_offset) % 12
+        hour = (hour + self.tz_offset) % 24
 
         astring = "?:?:?"
         if self.clock_mode == _CLOCK_12HR:
-            hour = (hour - 1) % 12 + 1
             mod = "am" if hour < 12 else "pm"
+            hour = (hour - 1) % 12 + 1
             astring = "{: 2d}:{:02d}:{:02d} {}".format(hour, minute, sec, mod)
         elif self.clock_mode == _CLOCK_24HR:
             astring = "{:02d}:{:02d}:{:02d}".format(hour, minute, sec)

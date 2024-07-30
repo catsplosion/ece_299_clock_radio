@@ -61,9 +61,6 @@ if __name__ == "__main__":
     alarm_volume = menu.Functionality_Roller(None, "Alarm Volume", state, display, leds, menu_handler)
     alarm_volume.set_roller_fns(state.set_alarm_volume, state.get_alarm_volume, 1)
 
-    led_toggle = menu.Functionality_Toggle(None, "Enable LEDs", state, display, leds, menu_handler)
-    led_toggle.set_toggle_fns(state.enable_led, state.disable_led)
-
     alarm_snooze = menu.Functionality_Roller(None, "Snooze Delay", state, display, leds, menu_handler)
     alarm_snooze.set_roller_fns(state.set_snooze_delay, state.get_snooze_delay)
 
@@ -92,7 +89,6 @@ if __name__ == "__main__":
     menu_radio.add_child(mute_radio)
 
     menu_root.add_child(change_rgb)
-    menu_root.add_child(led_toggle)
         
     menu_root.add_child(lighting_state)
     
