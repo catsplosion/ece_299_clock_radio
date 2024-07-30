@@ -179,8 +179,8 @@ class ClockState():
 
         self._pwm_lohi = not self._pwm_lohi
 
-    def datetimezoned(self):
-        year, month, day, _, hour, minute, sec, _ = self.rtc.datetime()
+    def datetimezoned(self, datetime=None):
+        year, month, day, _, hour, minute, sec, _ = datetime or self.rtc.datetime()
 
         hour += self.tz_offset
 
@@ -255,18 +255,11 @@ class ClockState():
     def set_tz_offset(self, offset):
         self.tz_offset = max(min(offset, 14), -12)
 
-    def get_clock_string(self):
-        """
-        Return the clock values as a 2-tuple of strings.
-
-        Returns:
-            (time, date)
-        """
-        year, month, day, hour, minute, sec = self.datetimezoned()
-
+    def format_clock_string(self, datetime):
+        year, month, day, hour, minute, sec = datetime
         tstring = "?:?:?"
         if self.clock_mode == _CLOCK_12HR:
-            mod = "am" if hour < 11 else "pm"
+            mod = "am" if hour < 12 else "pm"
             hour = (hour - 1) % 12 + 1
             tstring = "{:2d}:{:02d}:{:02d} {}".format(hour, minute, sec, mod)
         elif self.clock_mode == _CLOCK_24HR:
@@ -275,6 +268,15 @@ class ClockState():
         dstring = "{}/{:02d}/{:04d}".format(MONTHS[month], day, year)
 
         return tstring, dstring
+
+    def get_clock_string(self):
+        """
+        Return the clock values as a 2-tuple of strings.
+
+        Returns:
+            (time, date)
+        """
+        return self.format_clock_string(self.datetimezoned())
 
     def set_alarm(self, time=None, volume=None, pattern=None, snooze=None):
         """

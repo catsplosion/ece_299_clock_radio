@@ -15,6 +15,7 @@ class MenuHandler: #keeping track of what is currently selected,
         self.display = display
         self.root = None #This creates an attribute local to the instance. Self is automatically passed?
         self._current = self.root
+        self.pause_reset_timer = False
 
         encoder.set_ccw_fn(self._ccw_handler)
         encoder.set_cw_fn(self._cw_handler)
@@ -35,6 +36,9 @@ class MenuHandler: #keeping track of what is currently selected,
         )
 
     def _reset_timer_handler(self, timer):
+        if self.pause_reset_timer:
+            return
+
         self._current = self.root
         self.render()
 
@@ -122,6 +126,9 @@ class MenuItem:
         self.children.append(node)
         node.parent = self
         return node #so you can actually do stuff with it (ex new = node.add_child(...))
+
+    def enter(self):
+        pass
 
     def cw(self): #all of this will be overloaded.
         pass
@@ -265,6 +272,50 @@ class Functionality_AlarmTime(MenuItem):
         print_debug(message, end="")
 
 
+class Functionality_ClockTime(MenuItem):
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
+
+        self.selections = ["hour", "minute", "second"]
+        self.index = 0
+        self.datetime = [0, 0, 0, 0, 0, 0, 0, 0]
+
+    def enter(self):
+        self.handler.pause_reset_timer = True
+        year, month, day, _, hour, minute, sec, _ = self.state.rtc.datetime()
+        self.datetime = list(self.state.rtc.datetime())
+
+    def ccw(self):
+        self.datetime[self.index+4] -= 1
+        self.datetime[4] %= 24
+        self.datetime[5] %= 60
+        self.datetime[6] %= 60
+
+    def cw(self):
+        self.datetime[self.index+4] += 1
+        self.datetime[4] %= 24
+        self.datetime[5] %= 60
+        self.datetime[6] %= 60
+
+    def press(self):
+        self.index = (self.index + 1) % 3
+
+    def back(self):
+        self.state.rtc.datetime(self.datetime)
+        self.handler.pause_reset_timer = False
+        super().back()
+
+    def render(self):
+        datetime = self.state.datetimezoned(self.datetime)
+        tstring = self.state.format_clock_string(datetime)[0]
+
+        self.display.oled.text("Clock time:", 0, 36)
+        self.display.oled.text(tstring, 30, 46)
+
+        message = "Clock time: {}".format(tstring)
+        print_debug(message, end="")
+
+
 class Functionality_Toggle(MenuItem):
     def __init__(self, parent, name, state, display, leds, handler):
         super().__init__(parent, name, state, display, leds, handler)
@@ -368,6 +419,7 @@ class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
 
     def press(self): 
         self.handler._current = self.children[self.index]
+        self.handler._current.enter()
 
     def render(self):
         start = max(min(self.index + 4, len(self.children)) - 4, 0)

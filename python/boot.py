@@ -70,6 +70,8 @@ if __name__ == "__main__":
     zone_offset = menu.Functionality_Roller(None, "Time Zone", state, display, leds, menu_handler)
     zone_offset.set_roller_fns(state.set_tz_offset, state.get_tz_offset)
 
+    clock_time = menu.Functionality_ClockTime(None, "Clock Time", state, display, leds, menu_handler)
+
     clock_view.add_child(menu_root)
 
     menu_root.add_child(menu_alarm)
@@ -79,6 +81,7 @@ if __name__ == "__main__":
     menu_alarm.add_child(alarm_snooze)
 
     menu_root.add_child(menu_time)
+    menu_time.add_child(clock_time)
     menu_time.add_child(change_time_format)
     menu_time.add_child(zone_offset)
 
