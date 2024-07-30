@@ -63,6 +63,7 @@ class ClockState():
         self.tz_offset = 0
 
         self.alarm_state = _ALARM_OFF
+        self.alarm_enabled = False
         self.alarm_time = (0, 0, 0)
         self.alarm_volume = 2
         self.alarm_pattern = 0
@@ -335,6 +336,7 @@ class ClockState():
         Enable the alarm for the current alarm settings.
         """
         self.alarm_state = _ALARM_ON
+        self.alarm_enabled = True
 
     def disable_alarm(self):
         """
@@ -342,6 +344,7 @@ class ClockState():
         """
         self.alarm_state = _ALARM_OFF
         self._unsound_alarm()
+        self.alarm_enabled = False
 
     def snooze_alarm(self):
         """

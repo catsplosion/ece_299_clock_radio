@@ -16,6 +16,10 @@ NUMBER_BITS = [
     bytearray.fromhex("3C3C666666663E3E060666663C3C")
 ]
 
+ICON_BITS = [
+    bytearray.fromhex("18247E4242817E18")
+]
+
 
 class Oled:
     def __init__(self, sck, sda, res, dc ,cs, line=0, baudrate=100000, width=128, height=64):
@@ -40,5 +44,12 @@ class Oled:
         for i in range(10):
             self._number_buf[i] = framebuf.FrameBuffer(NUMBER_BITS[i], 8, 14, framebuf.MONO_HLSB)
 
+        self._icon_buf = [None]*len(ICON_BITS)
+        for i in range(len(ICON_BITS)):
+            self._icon_buf[i] = framebuf.FrameBuffer(ICON_BITS[i], 8, 8, framebuf.MONO_HLSB)
+
     def tall_digit(self, digit, x, y):
         self.oled.blit(self._number_buf[digit], x, y)
+
+    def bell(self, x, y):
+        self.oled.blit(self._icon_buf[0], x, y)
