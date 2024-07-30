@@ -41,8 +41,10 @@ class LEDS():
     def Constant(self, Off=False):
         
         for n in range(self.num_leds):
+            
             if not Off:
                 self.npleds[n] =  (self.clock_state.led_color[0], self.clock_state.led_color[1], self.clock_state.led_color[2])
+               # print("here!")
             else:
                 self.npleds[n] =  (0, 0, 0)
             
@@ -53,12 +55,15 @@ class LEDS():
         while (True): #self.clock_state.led_states["FFT"]
         #for i in range (1000):
             
-            if(self.clock_state.radio_muted != False or	 self.clock_state.radio_enabled != True or self.clock_state.led_states["FFT"] != True): #Due to noise, even if the radio is off, the ADC still reads values
+            if(self.clock_state.radio_muted != False or self.clock_state.radio_enabled != True or self.clock_state.led_states["FFT"] != True): #Due to noise, even if the radio is off, the ADC still reads values
                 
-                if(self.cock_state.led_states["Set Colour"]):
+                if(self.clock_state.led_states["Set Colour"] and not state_changed):
+                    state_changed = True
                     self.Constant(False)
-                
-                self.Constant(True) # Assume "OFF" State
+                    
+                else:
+                    self.Constant(True) # Assume "OFF" State
+                    state_changed = False
                 
             
 
@@ -67,7 +72,7 @@ class LEDS():
                 for i in range (self.num_cycles):
                     
                     self.digital_value = self.analog_value.read_u16()     
-                    print("ADC: ", self.digital_value)
+                   # print("ADC: ", self.digital_value)
                     
                     self.ADC_y[i] = (self.digital_value)        
                     utime.sleep_us(self.sampling_period) 
@@ -105,7 +110,7 @@ class LEDS():
                         self.average_magnitude += self.magnitudes[self.q] # Take the average mangitude and phase of that frequency band (each led represents a frequency band)
                         self.average_phase += self.phases[self.q]
                         
-                    self.c = 1 # scalar 
+                    self.c = 50 # scalar 
                
                     self.num_bins_per_led = self.num_cycles // self.num_leds
                     self.average_magnitude /= (self.num_bins_per_led * 255)
@@ -131,7 +136,7 @@ class LEDS():
                     elif self.average_phase >= (np.pi / 2) and self.average_phase < np.pi:
                         self.npleds[n] = tuple(map(int, np.ceil(((self.led_def[0] + self.linear_increase) * self.average_magnitude, self.led_def[1], self.led_def[2]))))  # Increase red
                     
-                    print(self.npleds[n][0], self.npleds[n][1], self.npleds[n][2])
+                    #print(self.npleds[n][0], self.npleds[n][1], self.npleds[n][2])
                     self.npleds.write()
                 
                 elapsed_time = utime.ticks_diff(utime.ticks_ms(), start_time)
