@@ -1,6 +1,8 @@
+import time
+
 from machine import Timer
 
-from clock_state import ClockState
+import clock_state
 from Display import Oled
 import MenuSystem as menu
 from push_button import PushButton
@@ -14,7 +16,7 @@ back_button = PushButton(10)
 display = Oled(18, 19, 21, 20, 17)
 
 
-state = ClockState()
+state = clock_state.ClockState()
 
 leds = LEDS(28, 8, 8, state)
 
@@ -22,6 +24,16 @@ menu_handler = menu.MenuHandler(encoder, accept_button, back_button, state, disp
 
 def update_handler(timer):
     state.update()
+    menu_handler.render()
+    
+def sound_alarm():
+    state.alarm_state = clock_state._ALARM_TEST
+    state._sound_alarm()
+    menu_handler.render()
+    
+def unsound_alarm():
+    state.alarm_state = clock_state._ALARM_OFF
+    state._unsound_alarm()
     menu_handler.render()
 
 if __name__ == "__main__":
@@ -61,13 +73,20 @@ if __name__ == "__main__":
     alarm_volume = menu.Functionality_Roller(None, "Alarm Volume", state, display, leds, menu_handler)
     alarm_volume.set_roller_fns(state.set_alarm_volume, state.get_alarm_volume, 1)
 
-    alarm_snooze = menu.Functionality_Roller(None, "Snooze Delay", state, display, leds, menu_handler)
-    alarm_snooze.set_roller_fns(state.set_snooze_delay, state.get_snooze_delay)
+    alarm_delay = menu.Functionality_Roller(None, "Snooze Delay", state, display, leds, menu_handler)
+    alarm_delay.set_roller_fns(state.set_snooze_delay, state.get_snooze_delay)
 
     zone_offset = menu.Functionality_Roller(None, "Time Zone", state, display, leds, menu_handler)
     zone_offset.set_roller_fns(state.set_tz_offset, state.get_tz_offset)
 
     clock_time = menu.Functionality_ClockTime(None, "Clock Time", state, display, leds, menu_handler)
+    clock_date = menu.Functionality_ClockDate(None, "Clock Date", state, display, leds, menu_handler)
+    
+    alarm_pattern = menu.Functionality_AlarmPattern(None, "Alarm Pattern", state, display, leds, menu_handler)
+    alarm_pattern.set_roller_fns(state.set_alarm_pattern, state.get_alarm_pattern)
+    
+    alarm_test = menu.Functionality_Toggle(None, "Alarm Test", state, display, leds, menu_handler)
+    alarm_test.set_toggle_fns(sound_alarm, unsound_alarm)
 
     clock_view.add_child(menu_root)
 
@@ -75,10 +94,13 @@ if __name__ == "__main__":
     menu_alarm.add_child(alarm_time)
     menu_alarm.add_child(toggle_alarm)
     menu_alarm.add_child(alarm_volume)
-    menu_alarm.add_child(alarm_snooze)
+    menu_alarm.add_child(alarm_delay)
+    menu_alarm.add_child(alarm_pattern)
+    # menu_alarm.add_child(alarm_test)
 
     menu_root.add_child(menu_time)
     menu_time.add_child(clock_time)
+    menu_time.add_child(clock_date)
     menu_time.add_child(change_time_format)
     menu_time.add_child(zone_offset)
 
@@ -100,6 +122,6 @@ if __name__ == "__main__":
 
     update_timer = Timer(mode=Timer.PERIODIC, freq=1, callback=update_handler)
     
-    leds.FFT_State()
+    # leds.fft_loop()
 
         

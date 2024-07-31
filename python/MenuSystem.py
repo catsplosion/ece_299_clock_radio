@@ -1,5 +1,8 @@
 from machine import Timer
 
+import clock_state
+import Leds_Handler
+
 
 _RESET_DELAY = 10000
 _DEBUG = False
@@ -16,6 +19,7 @@ class MenuHandler: #keeping track of what is currently selected,
         self.root = None #This creates an attribute local to the instance. Self is automatically passed?
         self._current = self.root
         self.pause_reset_timer = False
+        self.alarm_screen = False
 
         encoder.set_ccw_fn(self._ccw_handler)
         encoder.set_cw_fn(self._cw_handler)
@@ -46,6 +50,14 @@ class MenuHandler: #keeping track of what is currently selected,
         if not self._current:
             return
 
+        if self.state.alarm_state in (clock_state._ALARM_SOUND, clock_state._ALARM_TEST):
+            if not self.alarm_screen:
+                self.display.oled.fill(0)
+                self.display.oled.text("!! ALARM !!", 20, 28)
+                self.display.oled.show()
+                self.alarm_screen = True
+            return
+
         self.display.oled.fill(0)
 
         if self._current != self.root:
@@ -58,14 +70,16 @@ class MenuHandler: #keeping track of what is currently selected,
         self.display.oled.show()
         print_debug("")
 
+        self.alarm_screen = False
+
     def _ccw_handler(self):
         if not self._current:
             return
 
         self._start_reset_timer()
 
-        if self.state.alarm_sounding():
-            self.state.snooze_alarm()
+        if self.state.alarm_enabled and self.state.alarm_sounding():
+            self.state.shutoff_alarm()
             return
 
         self._current.ccw()
@@ -77,8 +91,8 @@ class MenuHandler: #keeping track of what is currently selected,
 
         self._start_reset_timer()
 
-        if self.state.alarm_sounding():
-            self.state.snooze_alarm()
+        if self.state.alarm_enabled and self.state.alarm_sounding():
+            self.state.shutoff_alarm()
             return
 
         self._current.cw()
@@ -90,7 +104,7 @@ class MenuHandler: #keeping track of what is currently selected,
 
         self._start_reset_timer()
 
-        if self.state.alarm_sounding():
+        if self.state.alarm_enabled and self.state.alarm_sounding():
             self.state.snooze_alarm()
             return
 
@@ -101,7 +115,7 @@ class MenuHandler: #keeping track of what is currently selected,
         if not self._current:
             return
 
-        if self.state.alarm_sounding():
+        if self.state.alarm_enabled and self.state.alarm_sounding():
             self.state.snooze_alarm()
             return
 
@@ -310,10 +324,67 @@ class Functionality_ClockTime(MenuItem):
         datetime = self.state.datetimezoned(self.datetime)
         tstring = self.state.format_clock_string(datetime)[0]
 
-        self.display.oled.text("Clock time:", 0, 36)
+        selection = self.selections[self.index]
+        self.display.oled.text("Change {}:".format(selection), 0, 36)
         self.display.oled.text(tstring, 30, 46)
 
         message = "Clock time: {}".format(tstring)
+        print_debug(message, end="")
+
+
+class Functionality_ClockDate(MenuItem):
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
+
+        self.selections = ["year", "month", "day"]
+        self.index = 1
+        self.datetime = [0, 0, 0, 0, 0, 0, 0, 0]
+
+    def enter(self):
+        self.index = 1
+        self.handler.pause_reset_timer = True
+        year, month, day, _, hour, minute, sec, _ = self.state.rtc.datetime()
+        self.datetime = list(self.state.rtc.datetime())
+
+    def ccw(self):
+        self.datetime[self.index] -= 1
+        self.datetime[0] = max(self.datetime[0], 0)
+        self.datetime[1] = max(min(self.datetime[1], 12), 1)
+        
+        month = self.datetime[1]
+        is_leap = clock_state.is_leap_year(self.datetime[0])
+        monthdays = clock_state.MONTHDAYS[month] + int(is_leap and month == 2)
+        
+        self.datetime[2] = max(min(self.datetime[2], monthdays), 1)
+
+    def cw(self):
+        self.datetime[self.index] += 1
+        self.datetime[0] = max(self.datetime[0], 0)
+        self.datetime[1] = max(min(self.datetime[1], 12), 1)
+        
+        month = self.datetime[1]
+        is_leap = clock_state.is_leap_year(self.datetime[0])
+        monthdays = clock_state.MONTHDAYS[month] + int(is_leap and month == 2)
+        
+        self.datetime[2] = max(min(self.datetime[2], monthdays), 1)
+
+    def press(self):
+        self.index = (self.index + 1) % 3
+
+    def back(self):
+        self.state.rtc.datetime(self.datetime)
+        self.handler.pause_reset_timer = False
+        super().back()
+
+    def render(self):
+        datetime = self.state.datetimezoned(self.datetime)
+        dstring = self.state.format_clock_string(datetime)[1]
+
+        selection = self.selections[self.index]
+        self.display.oled.text("Change {}:".format(selection), 0, 36)
+        self.display.oled.text(dstring, 30, 46)
+
+        message = "Clock date: {}".format(dstring)
         print_debug(message, end="")
 
 
@@ -400,6 +471,46 @@ class Functionality_Roller(MenuItem):
         print_debug(message, end="")
 
 
+class Functionality_AlarmPattern(Functionality_Roller):
+    def __init__(self, parent, name, state, display, leds, handler):
+        super().__init__(parent, name, state, display, leds, handler)
+        self.alarm_state = clock_state._ALARM_OFF
+
+    def enter(self):
+        self.handler.pause_reset_timer = True
+        self.alarm_state = self.state.alarm_state
+
+    def cw(self):
+        if self.state.alarm_sounding():
+            self.state.alarm_state = self.alarm_state
+            self.state._unsound_alarm()
+        else:
+            super().cw()
+
+    def ccw(self):
+        if self.state.alarm_sounding():
+            self.state.alarm_state = self.alarm_state
+            self.state._unsound_alarm()
+        else:
+            super().ccw()
+
+    def press(self):
+        if self.state.alarm_sounding():
+            self.state.alarm_state = self.alarm_state
+            self.state._unsound_alarm()
+        else:
+            self.state.alarm_state = clock_state._ALARM_TEST
+            self.state._sound_alarm()
+
+    def back(self):
+        if self.state.alarm_sounding():
+            self.state.alarm_state = self.alarm_state
+            self.state._unsound_alarm()
+        else:
+            self.handler.pause_reset_timer = False
+            super().back()
+
+
 class Functionality_MenuSelect(MenuItem): #Draw '<' "Item" '>'
     def __init__(self, parent, name, state, display, leds, handler):
         super().__init__(parent, name, state, display, leds, handler) 
@@ -476,7 +587,7 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
 
 class Functionality_Change_Lighting(MenuItem):
     def __init__(self, parent, name, state, display, leds, handler):
-        super().__init__(parent, name, state, display, leds, handler) 
+        super().__init__(parent, name, state, display, leds, handler)
                 
     def press(self):
         

@@ -2,6 +2,7 @@ import time
 
 from machine import ADC
 from machine import I2C
+from machine import Pin
 from machine import PWM
 from machine import RTC
 from machine import Timer
@@ -25,7 +26,6 @@ MONTHS = {
     12: "Dec"
 }
 
-
 MONTHDAYS = {
     1: 31,
     2: 28,
@@ -41,17 +41,24 @@ MONTHDAYS = {
     12: 31
 }
 
+ALARM_PATTERN = [
+    [620, 0, 620, 0, 620, 0, -1, -1, -1, -1],
+    [370, -1, 523, -1],
+    [880, -1, -1, -1, 0, 0, 0, 0]
+]
+
 _ALARM_OFF = 0
 _ALARM_ON = 1
 _ALARM_SOUND = 2
 _ALARM_SNOOZE = 3
+_ALARM_TEST = 4
 
 _CLOCK_12HR = 0
 _CLOCK_24HR = 1
 
 
 def is_leap_year(year):
-    return not (year % 4 or year % 100 or year % 400)
+    return not year % 4 or not year % 100 or not year % 400
 
 
 class ClockState():
@@ -69,11 +76,12 @@ class ClockState():
         self.alarm_pattern = 0
         self.alarm_stime = (0, 0, 0)
         self.alarm_sdelay = 5
+        self._alarm_sounding = False
 
         self._pwm_tick = 0
         self._pwm_lohi = False
         self._pwm = PWM(22)
-        self._pwm.deinit()
+        Pin(22, Pin.IN)
         self._pwm_pattern = Timer()
         self._pwm_freq = Timer()
 
@@ -129,44 +137,54 @@ class ClockState():
                 self._sound_alarm()
 
     def _sound_alarm(self):
+        self.radio.update_reg(
+            rda5807.RDA5807M_REG_CONFIG, rda5807.RDA5807M_FLG_DHIZ, 0)
+
+        self._pwm = PWM(22)
         self._pwm.freq(300000)
         self._pwm.duty_u16(0)
+
+        self._pwm_freq.deinit()
 
         self._pwm_tick = 0
         self._pwm_pattern.init(
             mode=Timer.PERIODIC,
-            freq=2,
+            freq=4,
             callback=self._pwm_pattern_handler
         )
 
-        self.radio.update_reg(
-            rda5807.RDA5807M_REG_CONFIG, rda5807.RDA5807M_FLG_DHIZ, 0)
+        self._alarm_sounding = True
 
     def _unsound_alarm(self):
+        self._pwm_pattern.deinit()
+        self._pwm_freq.deinit()
+        self._pwm.deinit()
+        Pin(22, Pin.IN)
+
         self.radio.update_reg(
             rda5807.RDA5807M_REG_CONFIG, rda5807.RDA5807M_FLG_DHIZ,
             rda5807.RDA5807M_FLG_DHIZ
         )
 
-        self._pwm_pattern.deinit()
-        self._pwm_freq.deinit()
-        self._pwm.deinit()
+        self._alarm_sounding = False
 
     def _pwm_set_freq(self, freq):
-        self._pwm_freq.init(
-            mode=Timer.PERIODIC,
-            freq=freq*2,
-            callback=self._pwm_freq_handler
-        )
+        if freq < 0:
+            return
+        elif freq == 0:
+            self._pwm_freq.deinit()
+            self._pwm.duty_u16(0)
+        else:
+            self._pwm_freq.init(
+                mode=Timer.PERIODIC,
+                freq=freq*2,
+                callback=self._pwm_freq_handler
+            )
 
     def _pwm_pattern_handler(self, timer):
-        if self.alarm_state != _ALARM_SOUND:
-            self._unsound_alarm()
-
-        if self._pwm_tick % 2 == 0:
-            self._pwm_set_freq(370)
-        else:
-            self._pwm_set_freq(523)
+        pattern = ALARM_PATTERN[self.alarm_pattern % len(ALARM_PATTERN)]
+        freq = pattern[self._pwm_tick % len(pattern)]
+        self._pwm_set_freq(freq)
 
         self._pwm_tick += 1
 
@@ -180,7 +198,7 @@ class ClockState():
         self._pwm_lohi = not self._pwm_lohi
 
     def datetimezoned(self, datetime=None):
-        year, month, day, _, hour, minute, sec, _ = datetime or self.rtc.datetime()
+        year, month, day, wk, hour, minute, sec, ms = datetime or self.rtc.datetime()
 
         hour += self.tz_offset
 
@@ -199,11 +217,14 @@ class ClockState():
         elif month > 12:
             year += 1
 
-        month = (month - 1) % 12 + 1
-        day = (day - 1) % MONTHDAYS[month] + int(is_leap_year(year) and month == 2) + 1
+        month = max(min(month, 12), 1)
+        is_leap = is_leap_year(year)
+        monthdays = MONTHDAYS[month] + int(is_leap and month == 2)
+
+        day = max(min(day, monthdays), 1)
         hour = hour % 24
 
-        return year, month, day, hour, minute, sec
+        return year, month, day, wk, hour, minute, sec, ms
 
     def set_time(self, time):
         """
@@ -256,7 +277,7 @@ class ClockState():
         self.tz_offset = max(min(offset, 14), -12)
 
     def format_clock_string(self, datetime):
-        year, month, day, hour, minute, sec = datetime
+        year, month, day, _, hour, minute, sec, _ = datetime
         tstring = "?:?:?"
         if self.clock_mode == _CLOCK_12HR:
             mod = "am" if hour < 12 else "pm"
@@ -306,6 +327,12 @@ class ClockState():
     def get_alarm_volume(self):
         return self.alarm_volume
 
+    def set_alarm_pattern(self, pattern):
+        self.alarm_pattern = pattern % len(ALARM_PATTERN)
+
+    def get_alarm_pattern(self):
+        return self.alarm_pattern
+
     def set_snooze_delay(self, snooze):
         self.set_alarm(snooze=snooze)
 
@@ -348,6 +375,11 @@ class ClockState():
         self._unsound_alarm()
         self.alarm_enabled = False
 
+    def shutoff_alarm(self):
+        if self.alarm_state != _ALARM_OFF:
+            self.alarm_state = _ALARM_ON
+            self._unsound_alarm()
+
     def snooze_alarm(self):
         """
         Snooze the current alarm.
@@ -363,7 +395,7 @@ class ClockState():
         """
         Return if the alarm is currently snoozed.
         """
-        return self.alarm_state == _ALARM_SOUND
+        return self._alarm_sounding
 
     def set_radio(self, freq=None, volume=None):
         """
