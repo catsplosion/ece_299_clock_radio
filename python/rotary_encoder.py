@@ -63,7 +63,7 @@ class RotaryEncoder(object):
         self._pin_dir.irq()
         self._timeout_timer.init(
             mode=Timer.ONE_SHOT,
-            period=500, callback=self._timeout_handler
+            period=200, callback=self._timeout_handler
         )
 
         if self._state == _CW3 and index == 3:

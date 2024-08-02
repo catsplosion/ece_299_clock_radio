@@ -17,7 +17,10 @@ NUMBER_BITS = [
 ]
 
 ICON_BITS = [
-    bytearray.fromhex("18247E4242817E18")
+    bytearray.fromhex("18247E4242817E18"),
+    bytearray.fromhex("1031F1F5F5F1F110"),
+    bytearray.fromhex("1035F5F2F2F53510"),
+    bytearray.fromhex("FE92543810101010")
 ]
 
 
@@ -53,3 +56,12 @@ class Oled:
 
     def bell(self, x, y):
         self.oled.blit(self._icon_buf[0], x, y)
+
+    def speaker_on(self, x, y):
+        self.oled.blit(self._icon_buf[1], x, y)
+
+    def speaker_mute(self, x, y):
+        self.oled.blit(self._icon_buf[2], x, y)
+
+    def radio(self, x, y):
+        self.oled.blit(self._icon_buf[3], x, y)

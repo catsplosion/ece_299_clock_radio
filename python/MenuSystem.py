@@ -228,26 +228,33 @@ class Functionality_FrequencyChange(MenuItem):
     def __init__(self, parent, name, state, display, leds, handler):
         super().__init__(parent, name, state, display, leds, handler)
 
-        self.selections = [1, 0.2]
+        self.selections = [1, 0.2, "seek"]
         self.index = 0
 
     def ccw(self):
-        freq = self.state.radio_freq
-        freq -= self.selections[self.index]
+        if self.index == 2:
+            self.state.seek_down()
+        else:
+            freq = self.state.radio_freq
+            freq -= self.selections[self.index]
 
-        self.state.set_radio(freq=freq)
+            self.state.set_radio(freq=freq)
 
     def cw(self):
-        freq = self.state.radio_freq
-        freq += self.selections[self.index]
+        if self.index == 2:
+            self.state.seek_up()
+        else:
+            freq = self.state.radio_freq
+            freq += self.selections[self.index]
 
-        self.state.set_radio(freq=freq)
+            self.state.set_radio(freq=freq)
 
     def press(self):
-        self.index = 0 if self.index else 1
+        self.index = (self.index + 1) % 3
 
     def render(self):
-        self.display.oled.text("Frequency:", 0, 36)
+        select = self.selections[self.index]
+        self.display.oled.text("Frequency {}:".format(select), 0, 36)
         self.display.oled.text("{:03.1f}".format(self.state.radio_freq), 30, 46)
 
         message = "Frequency: {:03.1f} ".format(self.state.radio_freq)
@@ -573,9 +580,16 @@ class Functionality_ClockDisplay(Functionality_MenuSelect):
             channel_name = self.state.stations.get(self.state.radio_freq, "")
             self.display.oled.text("{:.1f} {}".format(freq, channel_name), 0, 47)
 
-            volume = int(10 * self.state.radio_volume / 15)
-            strength = int(10 * self.state.radio.get_signal_strength() / 7)
-            self.display.oled.text("vol {:<2d} str {:<2d}".format(volume, strength), 0, 56)
+            volume = self.state.radio_volume + 1
+            if self.state.radio_muted:
+                self.display.speaker_mute(0, 56)
+            else:
+                self.display.speaker_on(0, 56)
+                self.display.oled.text("{:<2d}".format(volume), 10, 56)
+
+            strength = self.state.radio.get_signal_strength()
+            self.display.radio(32, 56)
+            self.display.oled.text("{:<2d}".format(strength), 42, 56)
 
         print_debug(tstring, end="")
 
@@ -596,6 +610,13 @@ class Functionality_Change_Lighting(MenuItem):
                 self.state.led_states[item] = False
             else:
                 self.state.led_states[item] = not self.state.led_states[item]
+
+        if self.name == "Set Colour":
+            self.leds.set_mode(Leds_Handler.LEDS_CONT)
+        elif self.name == "FFT":
+            self.leds.set_mode(Leds_Handler.LEDS_FFT)
+        else:
+            self.leds.set_mode(Leds_Handler.LEDS_OFF)
             
     def ccw(self):
         self.press()

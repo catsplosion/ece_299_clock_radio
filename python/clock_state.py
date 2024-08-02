@@ -190,7 +190,7 @@ class ClockState():
 
     def _pwm_freq_handler(self, timer):
         if self._pwm_lohi:
-            pwm_volume = int(self.alarm_volume * 64000 / 15)
+            pwm_volume = int(self.alarm_volume * 65535 / 16)
             self._pwm.duty_u16(pwm_volume)
         else:
             self._pwm.duty_u16(0)
@@ -318,7 +318,7 @@ class ClockState():
             self.alarm_time[2] % 60
         )
 
-        self.alarm_volume = max(min(15, self.alarm_volume), 1)
+        self.alarm_volume = max(min(16, self.alarm_volume), 1)
         self.alarm_sdelay = max(min(self.alarm_sdelay, 60), 1)
 
     def set_alarm_volume(self, volume):
@@ -419,6 +419,14 @@ class ClockState():
 
     def get_radio_volume(self):
         return self.radio_volume
+
+    def seek_up(self):
+        self.radio.seek_up()
+        self.radio_freq = self.radio.get_frequency_MHz()
+
+    def seek_down(self):
+        self.radio.seek_down()
+        self.radio_freq = self.radio.get_frequency_MHz()
 
     def mute_radio(self):
         """

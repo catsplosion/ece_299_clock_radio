@@ -36,6 +36,9 @@ def unsound_alarm():
     state._unsound_alarm()
     menu_handler.render()
 
+def get_radio_volume():
+    return state.get_radio_volume() + 1
+
 if __name__ == "__main__":
     
     clock_view = menu.Functionality_ClockDisplay(None, "display", state, display, leds, menu_handler)
@@ -65,7 +68,7 @@ if __name__ == "__main__":
     mute_radio.set_toggle_fns(state.mute_radio, state.unmute_radio)
 
     radio_volume = menu.Functionality_Roller(None, "Radio Volume", state, display, leds, menu_handler)
-    radio_volume.set_roller_fns(state.set_radio_volume, state.get_radio_volume, 1)
+    radio_volume.set_roller_fns(state.set_radio_volume, state.get_radio_volume, 1, str_fn=get_radio_volume)
 
     toggle_alarm = menu.Functionality_Toggle(None, "Enable Alarm", state, display, leds, menu_handler)
     toggle_alarm.set_toggle_fns(state.enable_alarm, state.disable_alarm)
@@ -122,6 +125,6 @@ if __name__ == "__main__":
 
     update_timer = Timer(mode=Timer.PERIODIC, freq=1, callback=update_handler)
     
-    # leds.fft_loop()
+    leds.fft_loop()
 
         
