@@ -1,20 +1,17 @@
 from machine import Pin, Timer
 
-
+# State values.
 _HOLD_UP = 0
 _FALLING = 1
 _HOLD_DOWN = 2
 _RISING = 3
 
-_DELAY_PERIOD = 4
-_DELAY_THRESHOLD = 4
-
 
 class PushButton(object):
     """
     Configure a machine.Pin as a push button input. Handles de-bouncing using a
-    consistency check. The check is called every _DELAY_PERIOD ms and if it
-    finds the expected HI or LO value _DELAY_THRESHOLD times in a row, a rising
+    consistency check. The check is called every delay_period ms and if it
+    finds the expected HI or LO value delay_threshold times in a row, a rising
     or falling event is triggered. Calls a given press function at the end of
     the button press-release cycle. The `pull_up` parameter determines whether
     the press function is called on rising edge (True) or falling edge (False).
@@ -22,8 +19,10 @@ class PushButton(object):
     pin(any): Id of the button pin. See id arg of machine.Pin.__init__.
     pull_up(bool): Set pin in pull-up mode if True, otherwise pull-down mode.
     """
-    def __init__(self, pin, pull_up=True):
+    def __init__(self, pin, pull_up=True, delay_period=4, delay_threshold=4):
         self._pull = Pin.PULL_UP if pull_up else Pin.PULL_DOWN
+        self._delay_period = delay_period
+        self._delay_threshold = delay_threshold
         self._state = _HOLD_UP if pull_up else _HOLD_DOWN
 
         self._irq_enable = False
@@ -67,7 +66,7 @@ class PushButton(object):
             self._enable_irq()
             return
 
-        if self._stable_count < _DELAY_THRESHOLD:
+        if self._stable_count < self._delay_threshold:
             self._stable_count += 1
             return
 
@@ -93,7 +92,7 @@ class PushButton(object):
     def _start_timer(self):
         self._timer.init(
             mode=Timer.PERIODIC,
-            period=_DELAY_PERIOD,
+            period=self._delay_period,
             callback=self._timer_handler
         )
         self._timer_enabled = True
@@ -121,4 +120,3 @@ class PushButton(object):
         """
         self._press_fn = fn
         self._press_fn_args = args
-

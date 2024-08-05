@@ -3,6 +3,8 @@ from ssd1306 import SSD1306_SPI
 import framebuf
 
 
+# Hold the bit arrays for the tall digits. Bits ordered from top left to bottom
+# right. Index 0 is digit 0, index 1 is digit 1, and so on.
 NUMBER_BITS = [
     bytearray.fromhex("3c3c66666E6E7676666666663C3C"),
     bytearray.fromhex("1818181838381818181818187E7E"),
@@ -16,6 +18,7 @@ NUMBER_BITS = [
     bytearray.fromhex("3C3C666666663E3E060666663C3C")
 ]
 
+# Hold the bit arrays for each icon. Same bit order as the tall digits.
 ICON_BITS = [
     bytearray.fromhex("18247E4242817E18"),
     bytearray.fromhex("1031F1F5F5F1F110"),
@@ -25,9 +28,23 @@ ICON_BITS = [
 
 
 class Oled:
-    def __init__(self, sck, sda, res, dc ,cs, line=0, baudrate=100000, width=128, height=64):
+    """
+    Wrapper class for the SSD1306 display module driver.
 
-        self.sck = Pin(sck) #Initalize as pin objects!
+    sck(int): The SPI CCK line.
+    sda(int): The SPI SDA line.
+    res(int): The RES line to the display module.
+    dc(int): The DC line to the display module.
+    cd(int): The CD line to the display module.
+    line(int): PICO SPI line to use.
+    baudrate(int): Base SPI clock rate to use.
+    width(int): Pixel width of the display.
+    height(int): Pixel height of the display.
+    """
+    def __init__(self, sck, sda, res, dc ,cs, line=0, baudrate=100000,
+            width=128, height=64):
+        # Store all the given arugments.
+        self.sck = Pin(sck)
         self.sda = Pin(sda)
         self.res = Pin(res)
         self.dc = Pin(dc)
@@ -37,31 +54,54 @@ class Oled:
         self.width = width
         self.height = height
 
-        self.oled_spi = SPI(self.line, self.baudrate, sck=self.sck, mosi=self.sda)
-
-        self.oled = SSD1306_SPI(self.width, self.height, self.oled_spi, self.dc, self.res, self.cs, True)
-
+        # Intialize the display driver.
+        self.oled_spi = SPI(
+            self.line, self.baudrate, sck=self.sck, mosi=self.sda)
+        self.oled = SSD1306_SPI(
+            self.width, self.height, self.oled_spi, self.dc, self.res,
+            self.cs, True
+        )
         self.oled.fill(0)
 
+        # Convert the digits and then icons into FrameBuffer objects.
         self._number_buf = [None]*10
         for i in range(10):
-            self._number_buf[i] = framebuf.FrameBuffer(NUMBER_BITS[i], 8, 14, framebuf.MONO_HLSB)
+            self._number_buf[i] = framebuf.FrameBuffer(
+                NUMBER_BITS[i], 8, 14, framebuf.MONO_HLSB)
 
         self._icon_buf = [None]*len(ICON_BITS)
         for i in range(len(ICON_BITS)):
-            self._icon_buf[i] = framebuf.FrameBuffer(ICON_BITS[i], 8, 8, framebuf.MONO_HLSB)
+            self._icon_buf[i] = framebuf.FrameBuffer(
+                ICON_BITS[i], 8, 8, framebuf.MONO_HLSB)
 
     def tall_digit(self, digit, x, y):
+        """
+        Draw tall digit to the display with the top left corner at (x,y).
+        """
         self.oled.blit(self._number_buf[digit], x, y)
 
     def bell(self, x, y):
+        """
+        Draw a bell icon to the display with the top left corner at (x,y).
+        """
         self.oled.blit(self._icon_buf[0], x, y)
 
     def speaker_on(self, x, y):
+        """
+        Draw a speaker icon to the display with the top left corner at (x,y)
+        """
         self.oled.blit(self._icon_buf[1], x, y)
 
     def speaker_mute(self, x, y):
+        """
+        Draw a muted speaker icon to the display with the top left corner at
+        (x,y)
+        """
         self.oled.blit(self._icon_buf[2], x, y)
 
     def radio(self, x, y):
+        """
+        Draw a radio signal icon to the display with the top left corner at
+        (x,y)
+        """
         self.oled.blit(self._icon_buf[3], x, y)

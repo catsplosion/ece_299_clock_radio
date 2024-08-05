@@ -2,6 +2,7 @@ from machine import Pin
 from machine import Timer
 
 
+# State values.
 _START = 0
 _CW1 = 1
 _CW2 = 2
@@ -10,6 +11,7 @@ _CCW1 = 4
 _CCW2 = 5
 _CCW3 = 6
 
+# State machine transition table.
 _TTABLE = [
     [_START, _CCW1,  _CW1,   _START],
     [_CW2,   _START, _CW1,   _START],
@@ -47,6 +49,8 @@ class RotaryEncoder(object):
         self._ccw_fn = None
         self._ccw_fn_args = []
 
+        # Time out the IRQ after a pulse is detected so the bounce doesn't hog
+        # all the processing time.
         self._timeout_timer = Timer()
 
     def __del__(self):
@@ -54,6 +58,7 @@ class RotaryEncoder(object):
         self._pin_dir.irq(None)
 
     def _irq_handler(self, pin):
+        # Advance the state machine based on the current value of each pin.
         index = self._pin_clk.value() + self._pin_dir.value()*2
 
         if self._pull is not Pin.PULL_UP:
@@ -74,14 +79,17 @@ class RotaryEncoder(object):
         self._state = _TTABLE[self._state][index]
 
     def _timeout_handler(self, timer):
+        # Re-enable the interrupts after a timer is up.
         self._pin_clk.irq(self._irq_handler, Pin.IRQ_FALLING | Pin.IRQ_RISING)
         self._pin_dir.irq(self._irq_handler, Pin.IRQ_FALLING | Pin.IRQ_RISING)
 
     def _call_cw_fn(self):
+        # Call an attached cw handler function.
         if self._cw_fn:
             self._cw_fn(*self._cw_fn_args)
 
     def _call_ccw_fn(self):
+        # Call an attached ccw handler function.
         if self._ccw_fn:
             self._ccw_fn(*self._ccw_fn_args)
 
